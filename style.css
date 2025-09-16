@@ -1,0 +1,186 @@
+/* Contact & Links row styles */
+.contact-links-row {
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+.contact-col,
+.links-col {
+  flex: 1 1 250px;
+  min-width: 220px;
+}
+.contact-col h3,
+.links-col h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: #1a237e;
+}
+.contact-email {
+  font-size: 1.1rem;
+  color: #1a6a7e;
+  text-decoration: none;
+  font-weight: 500;
+}
+.contact-email:hover {
+  text-decoration: underline;
+}
+.contact-socials {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+@media (max-width: 700px) {
+  .contact-links-row {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+/* Main styles for Light of Data company website */
+body {
+  font-family: "Ubuntu Sans", "Segoe UI", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f8fafc;
+  color: #222;
+}
+
+nav {
+  background: #1a6a7e;
+  color: #e5e5e5ff;
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: #e5e5e5ff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+nav a:hover {
+  color: #ffd600;
+}
+
+.hero {
+  background: linear-gradient(90deg, #1a547e 60%, #3976ab 100%);
+  color: #e5e5e5ff;
+  padding: 5rem 1.5rem 3rem 1.5rem;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 2.5rem;
+}
+
+.hero p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.section {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 2rem 1.5rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(30, 40, 90, 0.07);
+}
+
+.section h2 {
+  color: #1a237e;
+  margin-top: 0;
+}
+
+.services {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.service {
+  flex: 1 1 250px;
+  background: #f1f3f6;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 0.5rem 0;
+  box-shadow: 0 1px 4px rgba(30, 40, 90, 0.04);
+  text-align: center;
+}
+
+.service h3 {
+  margin-top: 0.5rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 0.75rem;
+  border: 1px solid #bdbdbd;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.contact-form button {
+  background: #1a237e;
+  color: #e5e5e5ff;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.contact-form button:hover {
+  background: #3949ab;
+}
+
+@media (max-width: 700px) {
+  .services {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .section {
+    padding: 1rem 0.5rem;
+  }
+
+  .hero {
+    padding: 3rem 0.5rem 2rem 0.5rem;
+  }
+}
