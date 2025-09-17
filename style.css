@@ -39,7 +39,7 @@
     gap: 1.5rem;
   }
 }
-/* Main styles for Light of Data company website */
+
 body {
   font-family: "Ubuntu Sans", "Segoe UI", Arial, sans-serif;
   margin: 0;
@@ -109,6 +109,7 @@ nav a:hover {
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(30, 40, 90, 0.07);
+  color: #222;
 }
 
 .section h2 {
@@ -132,6 +133,7 @@ nav a:hover {
   margin: 0.5rem 0;
   box-shadow: 0 1px 4px rgba(30, 40, 90, 0.04);
   text-align: center;
+  color: #222;
 }
 
 .service h3 {
@@ -144,30 +146,6 @@ nav a:hover {
   gap: 1rem;
   max-width: 400px;
   margin: 0 auto;
-}
-
-.contact-form input,
-.contact-form textarea {
-  padding: 0.75rem;
-  border: 1px solid #bdbdbd;
-  border-radius: 6px;
-  font-size: 1rem;
-}
-
-.contact-form button {
-  background: #1a237e;
-  color: #e5e5e5ff;
-  border: none;
-  padding: 0.75rem;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.contact-form button:hover {
-  background: #3949ab;
 }
 
 @media (max-width: 700px) {
@@ -183,4 +161,27 @@ nav a:hover {
   .hero {
     padding: 3rem 0.5rem 2rem 0.5rem;
   }
+}
+
+/* Manual dark mode override */
+html[data-theme="dark"] body {
+  background: #121417 !important;
+}
+html[data-theme="dark"] .section {
+  background: #23272e !important;
+  color: #d3d3d3 !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25) !important;
+}
+html[data-theme="dark"] .section h2,
+html[data-theme="dark"] .contact-col h3,
+html[data-theme="dark"] .links-col h3 {
+  color: #3976ab !important;
+}
+html[data-theme="dark"] .service {
+  background: #262c33 !important;
+  color: #d3d3d3 !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.58) !important;
+}
+html[data-theme="dark"] .contact-email {
+  color: #3976ab !important;
 }
