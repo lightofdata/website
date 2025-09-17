@@ -10,7 +10,6 @@
       // Dark mode toggle logic
       function setTheme(theme) {
         document.documentElement.setAttribute("data-theme", theme);
-        localStorage.setItem("theme", theme);
       }
       function toggleTheme() {
         const current = document.documentElement.getAttribute("data-theme");
@@ -18,12 +17,12 @@
       }
       // On load, set theme from localStorage or system
       (() => {
-        const saved = localStorage.getItem("theme");
-        if (saved) {
-          setTheme(saved);
-        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-          setTheme("dark");
-        }
+        const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+        setTheme(systemDark.matches ? "dark" : "light");
+        // Listen for system theme changes if user hasn't chosen manually
+        systemDark.addEventListener("change", (e) => {
+          setTheme(e.matches ? "dark" : "light");
+        });
       })();
     </script>
   </head>
