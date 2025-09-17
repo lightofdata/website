@@ -102,6 +102,10 @@ nav a:hover {
   margin-bottom: 2rem;
 }
 
+#about p {
+  line-height: 1.7;
+}
+
 .section {
   max-width: 900px;
   margin: 3rem auto;

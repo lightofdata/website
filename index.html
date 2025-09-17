@@ -42,15 +42,15 @@
         const current = document.documentElement.getAttribute("data-theme");
         setTheme(current === "dark" ? "light" : "dark", true);
       };
-      // On load, set theme from system
-      (() => {
+      // On load, set theme from system and update icons after DOM is ready
+      document.addEventListener("DOMContentLoaded", () => {
         const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
         setTheme(systemDark.matches ? "dark" : "light");
         // Listen for system theme changes if user hasn't chosen manually
         systemDark.addEventListener("change", (e) => {
           setTheme(e.matches ? "dark" : "light");
         });
-      })();
+      });
     </script>
   </head>
   <body>
