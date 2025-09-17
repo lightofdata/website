@@ -20,7 +20,9 @@
         const icon = document.getElementById("linkedin-icon");
         if (!icon) return;
         icon.src =
-          theme === "dark" ? "images/InBug-White.png" : "images/LI-In-Bug.png";
+          theme === "dark"
+            ? "images/InBug-White.png"
+            : "images/InBug-Black.png";
       };
       const updateHeadIcon = (theme) => {
         let link = document.querySelector("link[rel~='icon']");
