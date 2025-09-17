@@ -16,6 +16,12 @@
             ? "images/github-mark-white.svg"
             : "images/github-mark.svg";
       };
+      const updateLinkedInIcon = (theme) => {
+        const icon = document.getElementById("linkedin-icon");
+        if (!icon) return;
+        icon.src =
+          theme === "dark" ? "images/InBug-White.png" : "images/LI-In-Bug.png";
+      };
       const updateHeadIcon = (theme) => {
         let link = document.querySelector("link[rel~='icon']");
         if (!link) {
@@ -29,6 +35,7 @@
       const setTheme = (theme, manual = false) => {
         document.documentElement.setAttribute("data-theme", theme);
         updateGithubIcon(theme);
+        updateLinkedInIcon(theme);
         if (!manual) updateHeadIcon(theme);
       };
       const toggleTheme = () => {
@@ -171,6 +178,7 @@
             >
               <img
                 src="images/LI-In-Bug.png"
+                id="linkedin-icon"
                 alt="LinkedIn"
                 style="
                   height: 28px;
