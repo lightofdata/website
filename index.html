@@ -3,8 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Light Of Data</title>
-    <link rel="icon" type="image/svg+xml" href="images/logo312.svg" />
+    <title>Light of Data</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="images/logo-small-light-t.svg"
+    />
     <link rel="stylesheet" href="style.css?v=2" />
     <script>
       // Dark mode toggle logic
@@ -32,7 +36,9 @@
           document.getElementsByTagName("head")[0].appendChild(link);
         }
         link.href =
-          theme === "dark" ? "images/logo312.svg" : "images/logo313.svg";
+          theme === "dark"
+            ? "images/logo-small-light-t.svg"
+            : "images/logo-small-dark-t.svg";
       };
       const setTheme = (theme, manual = false) => {
         document.documentElement.setAttribute("data-theme", theme);
@@ -60,7 +66,7 @@
       <div class="container">
         <div class="logo">
           <img
-            src="images/logo312.svg"
+            src="images/logo-small-light-t.svg"
             alt="Light of Data logo"
             style="height: 40px; width: auto; vertical-align: middle"
           />
@@ -93,7 +99,7 @@
     <section class="hero" id="home">
       <h1>
         <img
-          src="images/logo411.svg"
+          src="images/logo-large-light-t.svg"
           alt="Light of Data logo"
           style="height: 60px; width: auto; vertical-align: middle"
         />
