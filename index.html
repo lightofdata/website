@@ -35,10 +35,12 @@
           link.rel = "icon";
           document.getElementsByTagName("head")[0].appendChild(link);
         }
+        link.type = "image/png";
+        link.rel = "icon";
         link.href =
           theme === "dark"
-            ? "images/small/png/logo-small-light-t.png"
-            : "images/small/png/logo-small-dark-t.png";
+            ? "images/small/png/logo-small-light-t.png?v=dark"
+            : "images/small/png/logo-small-dark-t.png?v=light";
       };
       const setTheme = (theme, manual = false) => {
         document.documentElement.setAttribute("data-theme", theme);
