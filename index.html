@@ -58,6 +58,13 @@
         systemDark.addEventListener("change", (e) => {
           setTheme(e.matches ? "dark" : "light");
         });
+        // Mobile menu toggle
+        const menuToggle = document.getElementById("menu-toggle");
+        const navLinks = document.getElementById("nav-links");
+        menuToggle.addEventListener("click", () => {
+          navLinks.classList.toggle("open");
+          menuToggle.classList.toggle("active");
+        });
       });
     </script>
   </head>
@@ -71,11 +78,14 @@
             style="height: 40px; width: auto; vertical-align: middle"
           />
         </div>
-        <ul>
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
+          <span class="menu-icon">&#9776;</span>
+        </button>
+        <ul class="nav-links" id="nav-links">
           <li><a href="#home">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="#about-title">About</a></li>
+          <li><a href="#services-title">Services</a></li>
+          <li><a href="#contact-title">Contact</a></li>
         </ul>
         <button
           id="theme-toggle"
@@ -86,7 +96,7 @@
             border-radius: 6px;
             border: none;
             cursor: pointer;
-            background: #1a547e;
+            background: #1a6a7e;
             color: #222;
             font-weight: 600;
           "
@@ -111,7 +121,7 @@
     </section>
 
     <section class="section" id="about">
-      <h2>About Us</h2>
+      <h2 id="about-title">About Us</h2>
       <p>
         Light of Data is dedicated to empowering organizations with cutting-edge
         software development and machine learning engineering. We focus on
@@ -122,7 +132,7 @@
     </section>
 
     <section class="section" id="services">
-      <h2>Our Services</h2>
+      <h2 id="services-title">Our Services</h2>
       <div class="services">
         <div class="service">
           <h3>Coding & Prototyping</h3>
@@ -163,7 +173,7 @@
     </section>
 
     <section class="section" id="contact">
-      <h2>Contact & Links</h2>
+      <h2 id="contact-title">Contact & Links</h2>
       <div class="contact-links-row">
         <div class="contact-col">
           <h3>Email</h3>
@@ -214,5 +224,12 @@
         </div>
       </div>
     </section>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <span>Light Of Data Ltd</span> | <span>Company #: 14811585</span> |
+        <span>VAT #: GB438798236</span>
+      </div>
+    </footer>
   </body>
 </html>
