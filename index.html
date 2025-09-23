@@ -58,6 +58,13 @@
         systemDark.addEventListener("change", (e) => {
           setTheme(e.matches ? "dark" : "light");
         });
+        // Mobile menu toggle
+        const menuToggle = document.getElementById("menu-toggle");
+        const navLinks = document.getElementById("nav-links");
+        menuToggle.addEventListener("click", () => {
+          navLinks.classList.toggle("open");
+          menuToggle.classList.toggle("active");
+        });
       });
     </script>
   </head>
@@ -71,7 +78,10 @@
             style="height: 40px; width: auto; vertical-align: middle"
           />
         </div>
-        <ul>
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
+          <span class="menu-icon">&#9776;</span>
+        </button>
+        <ul class="nav-links" id="nav-links">
           <li><a href="#home">Home</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#services">Services</a></li>
@@ -86,7 +96,7 @@
             border-radius: 6px;
             border: none;
             cursor: pointer;
-            background: #1a547e;
+            background: #1a6a7e;
             color: #222;
             font-weight: 600;
           "
@@ -217,8 +227,7 @@
 
     <footer class="footer">
       <div class="footer-content">
-        <span>Light Of Data Ltd</span> |
-        <span>Company #: 14811585</span> |
+        <span>Light Of Data Ltd</span> | <span>Company #: 14811585</span> |
         <span>VAT #: GB438798236</span>
       </div>
     </footer>
