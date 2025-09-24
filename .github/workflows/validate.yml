@@ -16,7 +16,7 @@ jobs:
       - name: Validate HTML
         run: |
           # Basic HTML validation
-            if [ -f "index.html" ]; then
+          if [ -f "index.html" ]; then
             echo "✓ index.html exists"
             # Check for basic HTML structure using more precise patterns
             if grep -q "<html[[:space:]>]" index.html && grep -q "</html[[:space:]>]" index.html; then
