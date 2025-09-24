@@ -30,14 +30,77 @@ jobs:
             exit 1
           fi
 
+      - name: Setup Node.js for CSS validation
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install CSS validation tools
+        run: |
+          npm install -g stylelint stylelint-config-standard
+
       - name: Validate CSS
         run: |
-          # Basic CSS validation
+          # Check if CSS files exist
           if [ -f "style.css" ]; then
             echo "✓ style.css exists"
+            
+            # Basic CSS syntax validation using stylelint
+            echo "Running CSS syntax checks..."
+            if [ -f ".stylelintrc.json" ]; then
+              stylelint style.css || {
+                echo "✗ CSS syntax errors found"
+                exit 1
+              }
+            else
+              stylelint style.css --config-basedir /usr/local/lib/node_modules/stylelint-config-standard || {
+                echo "✗ CSS syntax errors found"
+                exit 1
+              }
+            fi
+            echo "✓ CSS syntax validation passed"
+            
+            # Check for basic CSS structure
+            if grep -q "{" style.css && grep -q "}" style.css; then
+              echo "✓ Basic CSS structure found (contains braces)"
+            else
+              echo "⚠ Warning: No CSS rules found in style.css"
+            fi
+            
+            # Check for common CSS properties
+            if grep -qE "(color|background|font|margin|padding|width|height)" style.css; then
+              echo "✓ Common CSS properties detected"
+            else
+              echo "⚠ Warning: No common CSS properties found"
+            fi
+            
           else
             echo "✗ style.css not found"
             exit 1
+          fi
+
+          # Check for additional CSS files
+          css_files=$(find . -name "*.css" -not -path "./node_modules/*" 2>/dev/null)
+          if [ -n "$css_files" ]; then
+            echo "Found CSS files:"
+            echo "$css_files"
+            for css_file in $css_files; do
+              if [ "$css_file" != "./style.css" ]; then
+                echo "Validating $css_file..."
+                if [ -f ".stylelintrc.json" ]; then
+                  stylelint "$css_file" || {
+                    echo "✗ CSS syntax errors found in $css_file"
+                    exit 1
+                  }
+                else
+                  stylelint "$css_file" --config-basedir /usr/local/lib/node_modules/stylelint-config-standard || {
+                    echo "✗ CSS syntax errors found in $css_file"
+                    exit 1
+                  }
+                fi
+              fi
+            done
+            echo "✓ All CSS files validated successfully"
           fi
 
       - name: Check README
