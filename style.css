@@ -54,6 +54,8 @@
     margin: 0 0.5rem;
     flex: 0 0 auto;
     min-width: 0;
+    /* Smoother hamburger button animation */
+    transition: all var(--smooth-duration) var(--smooth-ease);
   }
   nav {
     min-height: 60px;
@@ -116,11 +118,6 @@
     transform: translateY(0);
     visibility: visible;
     pointer-events: auto;
-  }
-
-  /* Smoother hamburger button animation */
-  .menu-toggle {
-    transition: all var(--smooth-duration) var(--smooth-ease);
   }
   .menu-toggle.active {
     transform: rotate(90deg);
