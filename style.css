@@ -98,7 +98,6 @@
     box-shadow: 0 2px 8px rgba(30, 40, 90, 0.08);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 0;
-    /* transform: translateY(-10px); */
     visibility: hidden;
     pointer-events: none;
   }
