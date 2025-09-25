@@ -69,13 +69,45 @@
         });
 
         // Close menu when any navigation link is clicked
-        const navLinkItems = navLinks.querySelectorAll("a");
+        const navLinkItems = navLinks.querySelectorAll("li a");
         navLinkItems.forEach((link) => {
-          link.addEventListener("click", () => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            // Close the menu immediately
             navLinks.classList.remove("open");
             menuToggle.classList.remove("active");
+
+            // Get target and scroll smoothly after menu closes
+            const targetId = link.getAttribute("href");
+            const targetElement = document.querySelector(targetId);
+
+            if (targetElement) {
+              setTimeout(() => {
+                const navHeight =
+                  document.querySelector("nav").offsetHeight || 60;
+                const targetTop = targetElement.offsetTop - navHeight - 10;
+
+                window.scrollTo({
+                  top: Math.max(0, targetTop),
+                  behavior: "smooth",
+                });
+              }, 250); // Wait for menu close animation
+            }
           });
         });
+
+        // Handle logo click separately (no menu closing needed)
+        const logoLink = document.querySelector(".logo a");
+        if (logoLink) {
+          logoLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          });
+        }
       });
     </script>
   </head>
@@ -89,7 +121,7 @@
           >
             <img
               src="images/small/png/logo-small-light-t.png"
-              alt="Light of Data logo"
+              alt="l*d"
               style="height: 40px; width: auto; vertical-align: middle"
             />
           </a>
@@ -126,7 +158,7 @@
       <h1>
         <img
           src="images/large/png/logo-large-light-t.png"
-          alt="Light of Data logo"
+          alt="l*d Light of Data"
           style="height: 60px; width: auto; vertical-align: middle"
         />
       </h1>
