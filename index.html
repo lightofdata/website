@@ -69,6 +69,7 @@
         });
 
         // Close menu when any navigation link is clicked
+        const MENU_CLOSE_DELAY = 250; // ms
         const navLinkItems = navLinks.querySelectorAll("li a");
         navLinkItems.forEach((link) => {
           link.addEventListener("click", (e) => {
@@ -92,7 +93,7 @@
                   top: Math.max(0, targetTop),
                   behavior: "smooth",
                 });
-              }, 250); // Wait for menu close animation
+              }, MENU_CLOSE_DELAY); // Wait for menu close animation
             }
           });
         });
@@ -158,7 +159,7 @@
       <h1>
         <img
           src="images/large/png/logo-large-light-t.png"
-          alt="l*d Light of Data"
+          alt="Light of Data logo"
           style="height: 60px; width: auto; vertical-align: middle"
         />
       </h1>
