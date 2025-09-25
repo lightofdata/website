@@ -71,6 +71,7 @@
         // Close menu when any navigation link is clicked
         const MENU_CLOSE_DELAY = 250; // ms
         const navLinkItems = navLinks.querySelectorAll("li a");
+        const navHeight = document.querySelector("nav").offsetHeight || 60;
         navLinkItems.forEach((link) => {
           link.addEventListener("click", (e) => {
             e.preventDefault();
@@ -85,8 +86,6 @@
 
             if (targetElement) {
               setTimeout(() => {
-                const navHeight =
-                  document.querySelector("nav").offsetHeight || 60;
                 const targetTop = targetElement.offsetTop - navHeight - 10;
 
                 window.scrollTo({
