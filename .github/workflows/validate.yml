@@ -13,20 +13,49 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate HTML
+      - name: Setup environment for build
         run: |
-          # Basic HTML validation
-          if [ -f "index.html" ]; then
-            echo "✓ index.html exists"
-            # Check for basic HTML structure using more precise patterns
-            if grep -q "<html[[:space:]>]" index.html && grep -q "</html[[:space:]>]" index.html; then
+          # Create a test environment file for CI
+          echo "GA_TRACKING_ID_DEV=G-TEST-DEV" > .env.local
+          echo "GA_TRACKING_ID_STAGING=G-TEST-STAGING" >> .env.local  
+          echo "GA_TRACKING_ID_PROD=G-TEST-PROD" >> .env.local
+          echo "ENVIRONMENT=dev" >> .env.local
+
+      - name: Build and validate HTML
+        run: |
+          # Test the build process
+          chmod +x build.sh
+          ./build.sh dev
+
+          # Validate built HTML
+          if [ -f "build/index.html" ]; then
+            echo "✓ Built index.html exists"
+            
+            # Check for basic HTML structure
+            if grep -q "<html[[:space:]>]" build/index.html && grep -q "</html[[:space:]>]" build/index.html; then
               echo "✓ Basic HTML structure found"
             else
               echo "✗ Invalid HTML structure"
               exit 1
             fi
+            
+            # Verify tracking ID was replaced (should not contain placeholder)
+            if grep -q "{{GA_TRACKING_ID}}" build/index.html; then
+              echo "✗ Tracking ID placeholder not replaced!"
+              exit 1
+            else
+              echo "✓ Tracking ID placeholder successfully replaced"
+            fi
+            
+            # Verify tracking ID has correct format
+            if grep -q "G-TEST-DEV" build/index.html; then
+              echo "✓ Development tracking ID correctly inserted"
+            else
+              echo "✗ Development tracking ID not found"
+              exit 1
+            fi
           else
-            echo "✗ index.html not found"
+            echo "✗ Built index.html not found"
             exit 1
           fi
 

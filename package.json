@@ -1,0 +1,37 @@
+{
+  "name": "lightofdata-website",
+  "version": "1.0.0",
+  "description": "Light of Data - Website",
+  "main": "index.html",
+  "scripts": {
+    "build": "./build.sh",
+    "build:dev": "./build.sh dev",
+    "build:staging": "./build.sh staging",
+    "build:prod": "./build.sh prod",
+    "serve": "python3 -m http.server 8000",
+    "serve:build": "cd build && python3 -m http.server 8000",
+    "validate": "npm run validate:html && npm run validate:css",
+    "validate:html": "echo 'HTML validation...' && [ -f index.html ] && echo '✓ HTML exists'",
+    "validate:css": "stylelint style.css || echo 'Install stylelint: npm install -g stylelint stylelint-config-standard'",
+    "setup:env": "cp .env.example .env.local && echo 'Edit .env.local with your tracking IDs'",
+    "clean": "rm -rf build node_modules"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lightofdata/website.git"
+  },
+  "keywords": [
+    "website",
+    "portfolio",
+    "personal"
+  ],
+  "author": "mave240@gmail.com",
+  "license": "Light Of Data Ltd",
+  "devDependencies": {
+    "stylelint": "^16.24.0",
+    "stylelint-config-standard": "^39.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
