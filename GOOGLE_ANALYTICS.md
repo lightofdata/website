@@ -5,15 +5,6 @@ This project implements Google Analytics using a secure, build-time injection ap
 ## Security Features
 
 - **Build-time injection**: The Google Analytics tracking ID is injected during the build process, not exposed in source code
-- **Environment variable protection**: The tracking ID is stored in `.env` files that are gitignored
-
-## Environment Configuration
-
-Create a `.env` file in the project root:
-
-```env
-VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
-```
 
 ## How It Works
 
