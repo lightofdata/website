@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => {
       replace({
         preventAssignment: true,
         values: {
-          __GA_MEASUREMENT_ID__: env.VITE_GA_MEASUREMENT_ID || "G-CGZZ6MLGWX",
+          __GA_MEASUREMENT_ID__: env.VITE_GA_MEASUREMENT_ID,
         },
       }),
     ],
