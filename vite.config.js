@@ -14,8 +14,8 @@ export default defineConfig({
       output: {
         // Customize asset file names
         assetFileNames: (assetInfo) => {
-          const info = assetInfo.name.split(".");
-          const extType = info[info.length - 1];
+          const info = assetInfo.name?.split(".") || [];
+          const extType = info.at(-1) ?? "";
           if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
             return `images/[name]-[hash][extname]`;
           }
