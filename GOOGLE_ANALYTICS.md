@@ -9,9 +9,8 @@ This project implements Google Analytics using a secure, build-time injection ap
 ## How It Works
 
 1. The Vite build process uses `@rollup/plugin-replace` to replace `__GA_MEASUREMENT_ID__` placeholders
-2. Environment variables are loaded securely using Vite's `loadEnv` function
-3. The tracking ID is injected only during build, never exposed in source code
-4. CSP headers ensure only trusted Google Analytics domains can execute scripts
+2. The tracking ID is injected only during build, never exposed in source code
+3. CSP headers ensure only trusted Google Analytics domains can execute scripts
 
 ## Build Process
 
@@ -24,5 +23,3 @@ npm run dev    # Development server with GA tracking enabled
 
 - No tracking ID exposed in source code or version control
 - Build-time injection prevents credential leakage
-- CSP headers provide additional security layer
-- Environment variables are properly secured and gitignored
