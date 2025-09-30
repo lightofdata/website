@@ -7,9 +7,9 @@
     <link
       rel="icon"
       type="image/png"
-      href="images/small/png/logo-small-light-t.png"
+      href="/images/small/png/logo-small-light-t.png"
     />
-    <link rel="stylesheet" href="style.css?v=2" />
+    <link rel="stylesheet" href="/src/style.css" />
     <script>
       // Dark mode toggle logic
       const updateGithubIcon = (theme) => {
@@ -17,16 +17,16 @@
         if (!icon) return;
         icon.src =
           theme === "dark"
-            ? "images/github-mark-white.svg"
-            : "images/github-mark.svg";
+            ? "/images/github-mark-white.svg"
+            : "/images/github-mark.svg";
       };
       const updateLinkedInIcon = (theme) => {
         const icon = document.getElementById("linkedin-icon");
         if (!icon) return;
         icon.src =
           theme === "dark"
-            ? "images/InBug-White.png"
-            : "images/InBug-Black.png";
+            ? "/images/InBug-White.png"
+            : "/images/InBug-Black.png";
       };
       const updateHeadIcon = (theme) => {
         let link = document.querySelector("link[rel~='icon']");
@@ -37,8 +37,8 @@
         }
         link.href =
           theme === "dark"
-            ? "images/small/png/logo-small-light-t.png?v=dark"
-            : "images/small/png/logo-small-dark-t.png?v=light";
+            ? "/images/small/png/logo-small-light-t.png?v=dark"
+            : "/images/small/png/logo-small-dark-t.png?v=light";
       };
       const setTheme = (theme, manual = false) => {
         document.documentElement.setAttribute("data-theme", theme);
@@ -120,7 +120,7 @@
             style="text-decoration: none; display: flex; align-items: center"
           >
             <img
-              src="images/small/png/logo-small-light-t.png"
+              src="/images/small/png/logo-small-light-t.png"
               alt="Light of Data logo"
               style="height: 40px; width: auto; vertical-align: middle"
             />
@@ -157,7 +157,7 @@
     <section class="hero" id="home">
       <h1>
         <img
-          src="images/large/png/logo-large-light-t.png"
+          src="/images/large/png/logo-large-light-t.png"
           alt="Light of Data logo"
           style="height: 60px; width: auto; vertical-align: middle"
         />
@@ -239,7 +239,7 @@
               aria-label="LinkedIn"
             >
               <img
-                src="images/LI-In-Bug.png"
+                src="/images/LI-In-Bug.png"
                 id="linkedin-icon"
                 alt="LinkedIn"
                 style="
@@ -257,7 +257,7 @@
               aria-label="GitHub"
             >
               <img
-                src="images/github-mark.svg"
+                src="/images/github-mark.svg"
                 id="github-icon"
                 alt="GitHub"
                 style="

@@ -1,0 +1,23 @@
+{
+  "name": "lightofdata-website",
+  "version": "1.0.0",
+  "description": "Light of Data company website",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "vite preview",
+    "deploy": "npm run build"
+  },
+  "keywords": [
+    "website",
+    "vite",
+    "lightofdata"
+  ],
+  "author": "Light of Data",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^7.1.7"
+  }
+}
