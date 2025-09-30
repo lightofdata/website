@@ -29,15 +29,6 @@ npm run build  # Injects GA tracking ID and builds for production
 npm run dev    # Development server with GA tracking enabled
 ```
 
-## Privacy Compliance
-
-The implementation includes privacy-focused settings:
-
-- IP address anonymization
-- Disabled advertising features
-- Respect for Do Not Track preferences
-- Secure cookie settings with SameSite=Strict
-
 ## Security Benefits
 
 - No tracking ID exposed in source code or version control
