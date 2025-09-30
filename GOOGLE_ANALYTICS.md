@@ -12,7 +12,7 @@ This project implements Google Analytics using a secure, build-time injection ap
 Create a `.env` file in the project root:
 
 ```env
-VITE_GA_MEASUREMENT_ID=G-CGZZ6MLGWX
+VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 ```
 
 ## How It Works
