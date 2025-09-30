@@ -15,7 +15,7 @@ dist/
 .env.development
 
 # IDE files
-.vscode/
+# .vscode/
 .idea/
 *.swp
 *.swo

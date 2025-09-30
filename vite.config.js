@@ -1,8 +1,19 @@
 import { defineConfig } from "vite";
+import replace from "@rollup/plugin-replace";
 
 export default defineConfig({
   // Base path for deployment (adjust if deploying to a subdirectory)
   base: "./",
+
+  // Plugins configuration
+  plugins: [
+    replace({
+      preventAssignment: true,
+      values: {
+        __GA_MEASUREMENT_ID__: "G-CGZZ6MLGWX",
+      },
+    }),
+  ],
 
   // Build configuration
   build: {
