@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import replace from "@rollup/plugin-replace";
 
-export default defineConfig({
+export default defineConfig(({ command, mode }) => ({
   // Base path for deployment (adjust if deploying to a subdirectory)
   base: "./",
 
@@ -10,7 +10,8 @@ export default defineConfig({
     replace({
       preventAssignment: true,
       values: {
-        __GA_MEASUREMENT_ID__: "G-CGZZ6MLGWX",
+        __GA_MEASUREMENT_ID__:
+          mode === "production" ? "G-CGZZ6MLGWX" : "GA-DEVELOPMENT-MODE",
       },
     }),
   ],
@@ -46,4 +47,4 @@ export default defineConfig({
 
   // Asset handling
   assetsInclude: ["**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.gif", "**/*.svg"],
-});
+}));
