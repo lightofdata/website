@@ -4,9 +4,14 @@
     <!-- Google Consent Mode v2 -->
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag() {
+
+      // Store the original gtag function for development mode
+      const originalGtag = function () {
         dataLayer.push(arguments);
-      }
+      };
+
+      // Set up gtag globally
+      window.gtag = originalGtag;
 
       // Check if we're in development mode
       window.GA_MEASUREMENT_ID = "__GA_MEASUREMENT_ID__";
@@ -20,17 +25,11 @@
         );
         window.gtag_dev_mode = true;
 
-        // Override gtag function for development
-        const localGtag = gtag;
+        // Override gtag function for development with proper delegation
         window.gtag = function () {
-          console.log("📊 GA (dev):", arguments);
-          // If the real gtag is loaded, delegate to it, otherwise, call local
-          if (window.gtag && window.gtag !== arguments.callee) {
-            window.gtag.apply(this, arguments);
-          } else {
-            // Call the local gtag for consent mode functionality
-            localGtag.apply(this, arguments);
-          }
+          console.log("📊 GA (dev):", Array.from(arguments));
+          // Always call the original function for consent mode functionality
+          return originalGtag.apply(this, arguments);
         };
       }
 
@@ -54,14 +53,23 @@
         const script = document.createElement("script");
         script.async = true;
         script.src = `https://www.googletagmanager.com/gtag/js?id=${window.GA_MEASUREMENT_ID}`;
-        document.head.appendChild(script);
+
+        // Add error handling
+        script.onerror = () => {
+          console.warn("⚠️ Failed to load Google Analytics script");
+        };
 
         script.onload = () => {
+          // In production, the real gtag function will be available
+          // No need to override - the external script provides the real gtag
           gtag("config", window.GA_MEASUREMENT_ID, {
             anonymize_ip: true,
             cookie_flags: "SameSite=None;Secure",
           });
+          console.log("✅ Google Analytics loaded successfully");
         };
+
+        document.head.appendChild(script);
       } else {
         // Development: Skip loading GA script
         console.log(
@@ -231,8 +239,16 @@
             essential: true, // Always true
           };
 
-          localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify(preferences));
-          return preferences;
+          try {
+            localStorage.setItem(
+              COOKIE_CONSENT_KEY,
+              JSON.stringify(preferences)
+            );
+            return preferences;
+          } catch (e) {
+            console.warn("⚠️ Failed to save cookie preferences:", e.message);
+            return preferences; // Return preferences even if storage fails
+          }
         };
 
         // Update Google Consent Mode
