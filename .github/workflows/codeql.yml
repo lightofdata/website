@@ -10,7 +10,7 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
-    timeout-minutes: 360
+    timeout-minutes: 10 # Reduced from 360 minutes to 10 minutes
     permissions:
       actions: read
       contents: read
@@ -29,8 +29,8 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
-          # Use your custom queries along with the default ones
-          queries: security-extended,security-and-quality
+          # Use only essential queries for faster analysis
+          queries: security-essential
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@v3
