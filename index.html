@@ -1,18 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Google Analytics -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=__GA_MEASUREMENT_ID__"
-    ></script>
+    <!-- Google Consent Mode v2 -->
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag() {
+
+      // Store the original gtag function for development mode
+      const originalGtag = function () {
         dataLayer.push(arguments);
+      };
+
+      // Set up gtag globally
+      window.gtag = originalGtag;
+
+      // Check if we're in development mode
+      window.GA_MEASUREMENT_ID = "__GA_MEASUREMENT_ID__";
+      window.isProduction = window.GA_MEASUREMENT_ID !== "GA-DEVELOPMENT-MODE";
+      window.isDevelopment = !window.isProduction;
+
+      if (window.isDevelopment) {
+        // Development mode - log analytics calls instead of sending them
+        console.log(
+          "🔧 Development mode: Google Analytics calls will be logged to console"
+        );
+        window.gtag_dev_mode = true;
+
+        // Override gtag function for development with proper delegation
+        window.gtag = function () {
+          console.log("📊 GA (dev):", Array.from(arguments));
+          // Always call the original function for consent mode functionality
+          return originalGtag.apply(this, arguments);
+        };
       }
+
+      // Default consent state (GDPR compliant - all optional cookies denied by default)
+      gtag("consent", "default", {
+        analytics_storage: "denied",
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        functionality_storage: "granted",
+        security_storage: "granted",
+      });
+
+      // Load Google Analytics
       gtag("js", new Date());
-      gtag("config", "__GA_MEASUREMENT_ID__");
+    </script>
+    <!-- Google Analytics (only load in production) -->
+    <script>
+      if (window.isProduction) {
+        // Production: Load Google Analytics normally
+        const script = document.createElement("script");
+        script.async = true;
+        script.src = `https://www.googletagmanager.com/gtag/js?id=${window.GA_MEASUREMENT_ID}`;
+
+        // Add error handling
+        script.onerror = () => {
+          console.warn("⚠️ Failed to load Google Analytics script");
+        };
+
+        script.onload = () => {
+          // In production, the real gtag function will be available
+          // No need to override - the external script provides the real gtag
+          gtag("config", window.GA_MEASUREMENT_ID, {
+            anonymize_ip: true,
+            cookie_flags: "SameSite=None;Secure",
+          });
+          console.log("✅ Google Analytics loaded successfully");
+        };
+
+        document.head.appendChild(script);
+      } else {
+        // Development: Skip loading GA script
+        console.log(
+          "🔧 Development mode: Skipping Google Analytics script load"
+        );
+        // Still configure for testing consent functionality
+        gtag("config", "GA-DEVELOPMENT-MODE", {
+          anonymize_ip: true,
+          cookie_flags: "SameSite=None;Secure",
+        });
+      }
     </script>
 
     <meta charset="UTF-8" />
@@ -124,6 +192,226 @@
             });
           });
         }
+
+        // Cookie Consent Management
+        const COOKIE_CONSENT_KEY = "cookie-consent-preferences";
+        const COOKIE_CONSENT_VERSION = "1.0";
+        const COOKIE_DIALOG_SHOW_DELAY = 500; // ms
+
+        // Check if user has already given consent
+        const hasValidConsent = () => {
+          try {
+            const stored = localStorage.getItem(COOKIE_CONSENT_KEY);
+            if (!stored) return false;
+
+            const preferences = JSON.parse(stored);
+            return (
+              preferences.version === COOKIE_CONSENT_VERSION &&
+              preferences.timestamp
+            );
+          } catch (e) {
+            return false;
+          }
+        };
+
+        // Get stored consent preferences
+        const getConsentPreferences = () => {
+          try {
+            const stored = localStorage.getItem(COOKIE_CONSENT_KEY);
+            if (!stored) return null;
+
+            const preferences = JSON.parse(stored);
+            if (preferences.version !== COOKIE_CONSENT_VERSION) return null;
+
+            return preferences;
+          } catch (e) {
+            return null;
+          }
+        };
+
+        // Save consent preferences
+        const saveConsentPreferences = (analytics, marketing) => {
+          const preferences = {
+            version: COOKIE_CONSENT_VERSION,
+            timestamp: Date.now(),
+            analytics: analytics,
+            marketing: marketing,
+            essential: true, // Always true
+          };
+
+          try {
+            localStorage.setItem(
+              COOKIE_CONSENT_KEY,
+              JSON.stringify(preferences)
+            );
+            return preferences;
+          } catch (e) {
+            console.warn("⚠️ Failed to save cookie preferences:", e.message);
+            return preferences; // Return preferences even if storage fails
+          }
+        };
+
+        // Update Google Consent Mode
+        const updateGoogleConsent = (analytics, marketing) => {
+          if (typeof gtag === "function") {
+            gtag("consent", "update", {
+              analytics_storage: analytics ? "granted" : "denied",
+              ad_storage: marketing ? "granted" : "denied",
+              ad_user_data: marketing ? "granted" : "denied",
+              ad_personalization: marketing ? "granted" : "denied",
+            });
+          }
+        };
+
+        // Show cookie consent dialog
+        const showCookieDialog = () => {
+          const overlay = document.getElementById("cookie-consent-overlay");
+          if (overlay) {
+            // Ensure checkboxes reflect current stored preferences
+            applyStoredConsent();
+
+            overlay.classList.add("show");
+
+            // Focus management for accessibility
+            const firstButton = overlay.querySelector(
+              'button, input[type="checkbox"]'
+            );
+            if (firstButton) {
+              firstButton.focus();
+            }
+          }
+        };
+
+        // Update checkbox UI states
+        const updateCheckboxes = (analytics, marketing) => {
+          const analyticsCheckbox =
+            document.getElementById("analytics-consent");
+          const marketingCheckbox =
+            document.getElementById("marketing-consent");
+
+          if (analyticsCheckbox) analyticsCheckbox.checked = analytics;
+          if (marketingCheckbox) marketingCheckbox.checked = marketing;
+        };
+
+        // Hide cookie consent dialog
+        const hideCookieDialog = () => {
+          const overlay = document.getElementById("cookie-consent-overlay");
+          if (overlay) {
+            overlay.classList.remove("show");
+          }
+        };
+
+        // Apply stored consent on page load
+        const applyStoredConsent = () => {
+          const preferences = getConsentPreferences();
+          if (preferences) {
+            updateGoogleConsent(preferences.analytics, preferences.marketing);
+            // Update UI checkboxes to match stored preferences
+            updateCheckboxes(preferences.analytics, preferences.marketing);
+          } else {
+            // No stored preferences - ensure UI reflects GDPR compliant default state (all optional cookies off)
+            updateCheckboxes(false, false);
+          }
+        };
+
+        // Handle consent choices
+        const handleConsentChoice = (analytics, marketing) => {
+          const preferences = saveConsentPreferences(analytics, marketing);
+          updateGoogleConsent(analytics, marketing);
+          hideCookieDialog();
+
+          // Optional: Show confirmation message
+          console.log("Cookie preferences saved:", preferences);
+        };
+
+        // Initialize cookie consent functionality
+        const initCookieConsent = () => {
+          // Apply any stored consent
+          applyStoredConsent();
+
+          // Show dialog if no valid consent exists
+          if (!hasValidConsent()) {
+            // Show dialog after a short delay to ensure page is loaded
+            setTimeout(showCookieDialog, COOKIE_DIALOG_SHOW_DELAY);
+          }
+
+          // Event listeners
+          const acceptAllBtn = document.getElementById("cookie-accept-all");
+          const acceptSelectedBtn = document.getElementById(
+            "cookie-accept-selected"
+          );
+          const rejectAllBtn = document.getElementById("cookie-reject-all");
+          const closeBtn = document.getElementById("cookie-consent-close");
+          const preferencesBtn = document.getElementById(
+            "cookie-preferences-btn"
+          );
+          const overlay = document.getElementById("cookie-consent-overlay");
+
+          if (acceptAllBtn) {
+            acceptAllBtn.addEventListener("click", () => {
+              // Update checkboxes to reflect "Accept All" choice
+              updateCheckboxes(true, true);
+              handleConsentChoice(true, true);
+            });
+          }
+
+          if (acceptSelectedBtn) {
+            acceptSelectedBtn.addEventListener("click", () => {
+              const analyticsCheckbox =
+                document.getElementById("analytics-consent");
+              const marketingCheckbox =
+                document.getElementById("marketing-consent");
+
+              const analytics = analyticsCheckbox
+                ? analyticsCheckbox.checked
+                : false;
+              const marketing = marketingCheckbox
+                ? marketingCheckbox.checked
+                : false;
+
+              handleConsentChoice(analytics, marketing);
+            });
+          }
+
+          if (rejectAllBtn) {
+            rejectAllBtn.addEventListener("click", () => {
+              // Update checkboxes to reflect "Reject All" choice
+              updateCheckboxes(false, false);
+              handleConsentChoice(false, false);
+            });
+          }
+
+          if (closeBtn) {
+            closeBtn.addEventListener("click", hideCookieDialog);
+          }
+
+          if (preferencesBtn) {
+            preferencesBtn.addEventListener("click", showCookieDialog);
+          }
+
+          // Close dialog when clicking outside
+          if (overlay) {
+            overlay.addEventListener("click", (e) => {
+              if (e.target === overlay) {
+                hideCookieDialog();
+              }
+            });
+          }
+
+          // Keyboard accessibility
+          document.addEventListener("keydown", (e) => {
+            if (
+              e.key === "Escape" &&
+              overlay &&
+              overlay.classList.contains("show")
+            ) {
+              hideCookieDialog();
+            }
+          });
+        };
+
+        // Initialize cookie consent when DOM is ready
+        initCookieConsent();
       });
     </script>
   </head>
@@ -293,7 +581,113 @@
       <div class="footer-content">
         <span>Light Of Data Ltd</span> | <span>Company #: 14811585</span> |
         <span>VAT #: GB438798236</span>
+        <button
+          id="cookie-preferences-btn"
+          class="cookie-preferences-btn"
+          aria-label="Manage Cookie Preferences"
+        >
+          🍪 Cookie Preferences
+        </button>
       </div>
     </footer>
+
+    <!-- Cookie Consent Dialog -->
+    <div
+      id="cookie-consent-overlay"
+      class="cookie-consent-overlay"
+      role="dialog"
+      aria-labelledby="cookie-consent-title"
+      aria-describedby="cookie-consent-description"
+      aria-modal="true"
+    >
+      <div class="cookie-consent-dialog">
+        <div class="cookie-consent-header">
+          <h2 id="cookie-consent-title">Cookie Preferences</h2>
+          <button
+            id="cookie-consent-close"
+            class="cookie-consent-close"
+            aria-label="Close cookie preferences"
+          >
+            ×
+          </button>
+        </div>
+
+        <div class="cookie-consent-content">
+          <p id="cookie-consent-description">
+            We use cookies to enhance your browsing experience and analyze our
+            website traffic.
+            <strong>Optional cookies are disabled by default</strong> in
+            compliance with GDPR. Please select which cookies you would like to
+            enable below.
+          </p>
+
+          <div class="cookie-categories">
+            <div class="cookie-category">
+              <div class="cookie-category-header">
+                <h3>Essential Cookies</h3>
+                <span class="cookie-status">Always Active</span>
+              </div>
+              <p class="cookie-description">
+                These cookies are necessary for the website to function and
+                cannot be switched off. They are usually only set in response to
+                actions made by you.
+              </p>
+            </div>
+
+            <div class="cookie-category">
+              <div class="cookie-category-header">
+                <h3>Analytics Cookies</h3>
+                <label class="cookie-toggle">
+                  <input
+                    type="checkbox"
+                    id="analytics-consent"
+                    name="analytics"
+                  />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <p class="cookie-description">
+                These cookies help us understand how visitors interact with our
+                website by collecting and reporting information anonymously.
+              </p>
+            </div>
+
+            <div class="cookie-category">
+              <div class="cookie-category-header">
+                <h3>Marketing Cookies</h3>
+                <label class="cookie-toggle">
+                  <input
+                    type="checkbox"
+                    id="marketing-consent"
+                    name="marketing"
+                  />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <p class="cookie-description">
+                These cookies are used to track visitors across websites to
+                display relevant advertisements and measure campaign
+                effectiveness.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cookie-consent-footer">
+          <button id="cookie-accept-all" class="cookie-btn cookie-btn-primary">
+            Accept All
+          </button>
+          <button
+            id="cookie-accept-selected"
+            class="cookie-btn cookie-btn-secondary"
+          >
+            Accept Selected
+          </button>
+          <button id="cookie-reject-all" class="cookie-btn cookie-btn-outline">
+            Reject All
+          </button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

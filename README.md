@@ -55,6 +55,7 @@ A modern, responsive website for Light of Data built with Vite for fast developm
 
 - **Vite** - Fast build tool and dev server
 - **Vanilla HTML/CSS/JS** - Simple, lightweight approach
+- **Google Consent Mode v2** - GDPR-compliant analytics tracking
 - **GitHub Actions** - Automated deployment to GitHub Pages
 
 ## 🚢 Deployment
@@ -72,9 +73,41 @@ npm run deploy
 - ⚡ Fast development with Vite HMR
 - 📱 Responsive design
 - 🌙 Dark/light mode toggle
+- 🍪 **GDPR-compliant cookie consent dialog**
+- 🛡️ **Google Consent Mode v2 integration**
 - 🎨 Modern CSS with custom properties
+- Modern CSS with custom properties
 - 🚀 Optimized production builds
 - 📦 Automatic asset optimization
+- ♿ Full accessibility support (ARIA labels, keyboard navigation)
+
+## 🍪 Cookie Consent & Privacy
+
+This website implements a comprehensive GDPR-compliant cookie consent system:
+
+### Features
+
+- **GDPR Compliant**: All optional cookies are disabled by default
+- **Google Consent Mode v2**: Integrated with Google Analytics
+- **Granular Control**: Users can choose which cookie categories to enable
+- **Persistent Preferences**: Choices are saved in localStorage
+- **Accessibility**: Full keyboard navigation and screen reader support
+- **Responsive Design**: Works seamlessly on all devices
+
+### Cookie Categories
+
+- **Essential**: Always active (functionality, security)
+- **Analytics**: Google Analytics tracking (opt-in required)
+- **Marketing**: Advertisement cookies (opt-in required)
+
+### Development vs Production
+
+- **Development**: Console logging instead of actual tracking
+- **Production**: Full Google Analytics integration with consent respect
+
+### User Control
+
+Users can manage their cookie preferences at any time via the "🍪 Cookie Preferences" button in the footer.
 
 ## 🎯 Build Configuration
 
@@ -84,3 +117,4 @@ The Vite configuration includes:
 - CSS bundling
 - Production build optimization
 - GitHub Pages deployment support
+- Environment-based Google Analytics configuration
