@@ -4,9 +4,9 @@
     <!-- Google Consent Mode v2 -->
     <script>
       window.dataLayer = window.dataLayer || [];
-      const gtag = (...args) => {
-        dataLayer.push(...args);
-      };
+      function gtag() {
+        dataLayer.push(arguments);
+      }
 
       // Check if we're in development mode
       window.GA_MEASUREMENT_ID = "__GA_MEASUREMENT_ID__";
@@ -21,11 +21,16 @@
         window.gtag_dev_mode = true;
 
         // Override gtag function for development
-        const originalGtag = gtag;
-        window.gtag = (...args) => {
-          console.log("📊 GA (dev):", ...args);
-          // Still call original for consent mode functionality
-          originalGtag.apply(this, args);
+        const localGtag = gtag;
+        window.gtag = function () {
+          console.log("📊 GA (dev):", arguments);
+          // If the real gtag is loaded , delegate to it, otherwise, call local
+          if (window.gtag && window.gtag !== arguments.callee) {
+            window.gtag.apply(this, arguments);
+          } else {
+            // Call the local gtag for consent mode functionality
+            localGtag.apply(this, arguments);
+          }
         };
       }
 
@@ -183,6 +188,7 @@
         // Cookie Consent Management
         const COOKIE_CONSENT_KEY = "cookie-consent-preferences";
         const COOKIE_CONSENT_VERSION = "1.0";
+        const COOKIE_DIALOG_SHOW_DELAY = 500; // ms
 
         // Check if user has already given consent
         const hasValidConsent = () => {
@@ -311,7 +317,7 @@
           // Show dialog if no valid consent exists
           if (!hasValidConsent()) {
             // Show dialog after a short delay to ensure page is loaded
-            setTimeout(showCookieDialog, 500);
+            setTimeout(showCookieDialog, COOKIE_DIALOG_SHOW_DELAY);
           }
 
           // Event listeners
