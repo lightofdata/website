@@ -29,8 +29,8 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
-          # Use only essential queries for faster analysis
-          queries: security-essential
+          # Use built-in security queries
+          queries: security-and-quality
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@v3
