@@ -33,9 +33,9 @@
         };
       }
 
-      // Default consent state (analytics granted by default)
+      // Default consent state (GDPR compliant - all optional cookies denied by default)
       gtag("consent", "default", {
-        analytics_storage: "granted",
+        analytics_storage: "denied",
         ad_storage: "denied",
         ad_user_data: "denied",
         ad_personalization: "denied",
@@ -267,6 +267,9 @@
         const showCookieDialog = () => {
           const overlay = document.getElementById("cookie-consent-overlay");
           if (overlay) {
+            // Ensure checkboxes reflect current stored preferences
+            applyStoredConsent();
+
             overlay.classList.add("show");
 
             // Focus management for accessibility
@@ -277,6 +280,17 @@
               firstButton.focus();
             }
           }
+        };
+
+        // Update checkbox UI states
+        const updateCheckboxes = (analytics, marketing) => {
+          const analyticsCheckbox =
+            document.getElementById("analytics-consent");
+          const marketingCheckbox =
+            document.getElementById("marketing-consent");
+
+          if (analyticsCheckbox) analyticsCheckbox.checked = analytics;
+          if (marketingCheckbox) marketingCheckbox.checked = marketing;
         };
 
         // Hide cookie consent dialog
@@ -292,26 +306,11 @@
           const preferences = getConsentPreferences();
           if (preferences) {
             updateGoogleConsent(preferences.analytics, preferences.marketing);
-
-            // Update UI checkboxes
-            const analyticsCheckbox =
-              document.getElementById("analytics-consent");
-            const marketingCheckbox =
-              document.getElementById("marketing-consent");
-
-            if (analyticsCheckbox)
-              analyticsCheckbox.checked = preferences.analytics;
-            if (marketingCheckbox)
-              marketingCheckbox.checked = preferences.marketing;
+            // Update UI checkboxes to match stored preferences
+            updateCheckboxes(preferences.analytics, preferences.marketing);
           } else {
-            // No stored preferences - ensure UI reflects default state (analytics on)
-            const analyticsCheckbox =
-              document.getElementById("analytics-consent");
-            const marketingCheckbox =
-              document.getElementById("marketing-consent");
-
-            if (analyticsCheckbox) analyticsCheckbox.checked = true; // Analytics on by default
-            if (marketingCheckbox) marketingCheckbox.checked = false; // Marketing off by default
+            // No stored preferences - ensure UI reflects GDPR compliant default state (all optional cookies off)
+            updateCheckboxes(false, false);
           }
         };
 
@@ -350,6 +349,8 @@
 
           if (acceptAllBtn) {
             acceptAllBtn.addEventListener("click", () => {
+              // Update checkboxes to reflect "Accept All" choice
+              updateCheckboxes(true, true);
               handleConsentChoice(true, true);
             });
           }
@@ -374,6 +375,8 @@
 
           if (rejectAllBtn) {
             rejectAllBtn.addEventListener("click", () => {
+              // Update checkboxes to reflect "Reject All" choice
+              updateCheckboxes(false, false);
               handleConsentChoice(false, false);
             });
           }
@@ -612,7 +615,10 @@
         <div class="cookie-consent-content">
           <p id="cookie-consent-description">
             We use cookies to enhance your browsing experience and analyze our
-            website traffic. You can choose which cookies to accept below.
+            website traffic.
+            <strong>Optional cookies are disabled by default</strong> in
+            compliance with GDPR. Please select which cookies you would like to
+            enable below.
           </p>
 
           <div class="cookie-categories">

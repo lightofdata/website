@@ -16,7 +16,11 @@
   "keywords": [
     "website",
     "vite",
-    "lightofdata"
+    "lightofdata",
+    "gdpr",
+    "cookie-consent",
+    "google-analytics",
+    "privacy"
   ],
   "author": "Light of Data",
   "license": "ISC",
