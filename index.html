@@ -24,7 +24,7 @@
         const localGtag = gtag;
         window.gtag = function () {
           console.log("📊 GA (dev):", arguments);
-          // If the real gtag is loaded , delegate to it, otherwise, call local
+          // If the real gtag is loaded, delegate to it, otherwise, call local
           if (window.gtag && window.gtag !== arguments.callee) {
             window.gtag.apply(this, arguments);
           } else {
