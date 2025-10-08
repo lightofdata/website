@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import replace from "@rollup/plugin-replace";
 
-export default defineConfig(({ command, mode }) => ({
+export default defineConfig(({ mode }) => ({
   // Base path for deployment (adjust if deploying to a subdirectory)
   base: "./",
 

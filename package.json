@@ -11,7 +11,17 @@
     "deploy": "npm run build",
     "lint:css": "stylelint 'src/**/*.css'",
     "lint:css:fix": "stylelint 'src/**/*.css' --fix",
-    "lint": "npm run lint:css"
+    "lint:js": "eslint 'src/**/*.js' '*.js'",
+    "lint:js:fix": "eslint 'src/**/*.js' '*.js' --fix",
+    "lint": "npm run lint:css && npm run lint:js",
+    "lint:fix": "npm run lint:css:fix && npm run lint:js:fix",
+    "format": "prettier --write \"**/*.{js,css,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,css,json,md}\"",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest --watch"
   },
   "keywords": [
     "website",
@@ -25,9 +35,17 @@
   "author": "Light of Data",
   "license": "ISC",
   "devDependencies": {
+    "@eslint/js": "^9.37.0",
     "@rollup/plugin-replace": "^6.0.2",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/user-event": "^14.6.1",
+    "@vitest/coverage-v8": "^3.2.4",
+    "eslint": "^9.37.0",
+    "jsdom": "^27.0.0",
+    "prettier": "^3.6.2",
     "stylelint": "^16.24.0",
     "stylelint-config-standard": "^39.0.0",
-    "vite": "^7.1.7"
+    "vite": "^7.1.7",
+    "vitest": "^3.2.4"
   }
 }
