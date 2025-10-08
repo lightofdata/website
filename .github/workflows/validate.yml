@@ -45,14 +45,31 @@ jobs:
             exit 1
           fi
 
+      - name: Code Quality & Linting
+        run: |
+          echo "Running code quality checks..."
+
+          # Check code formatting
+          npm run format:check
+          echo "✓ Code formatting validation passed"
+
+          # Run all linting (CSS + JavaScript)
+          npm run lint
+          echo "✓ Linting validation passed"
+
+      - name: Test Suite
+        run: |
+          echo "Running comprehensive test suite..."
+
+          # Run all tests with coverage
+          npm run test:run
+          echo "✓ All tests passed successfully"
+
       - name: Validate CSS & Documentation
         run: |
           # Quick CSS check
           if [ -f "src/style.css" ]; then
             echo "✓ CSS file exists"
-            # Run CSS linting (fast)
-            npm run lint:css
-            echo "✓ CSS validation passed"
           else
             echo "✗ src/style.css not found"
             exit 1

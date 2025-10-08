@@ -29,6 +29,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Run Tests & Validation
+        run: |
+          # Ensure code quality before deployment
+          npm run format:check
+          npm run lint
+          npm run test:run
+
       - name: Build
         run: npm run build
 

@@ -384,15 +384,65 @@ Tests run automatically in GitHub Actions:
 
 ---
 
+## 🔄 CI/CD Integration
+
+### Automated Validation
+
+The test suite is automatically integrated into the merge process through GitHub Actions:
+
+#### Pull Request Validation (`validate.yml`)
+
+- **Triggers**: All pull requests to `main` branch
+- **Checks**:
+  - Code formatting (`npm run format:check`)
+  - Linting (CSS + JavaScript) (`npm run lint`)
+  - Full test suite (`npm run test:run`)
+  - Build verification
+  - HTML structure validation
+  - Documentation checks
+
+#### Deployment Pipeline (`deploy.yml`)
+
+- **Triggers**: Pushes to `main` branch and pull requests
+- **Pre-deployment validation**:
+  - Code formatting check
+  - Complete linting
+  - Full test suite execution
+- **Only deploys if all validations pass**
+
+### Merge Requirements
+
+**Before merging any pull request**, the following must pass:
+
+1. ✅ All 92 tests must pass
+2. ✅ Code formatting must be consistent
+3. ✅ No linting errors (CSS or JavaScript)
+4. ✅ Build must complete successfully
+5. ✅ HTML structure must be valid
+
+### Local Validation
+
+Before submitting a pull request, run the complete validation suite:
+
+```bash
+# Run full validation pipeline
+npm run format:check && npm run lint && npm run test:run && npm run build
+```
+
+---
+
 ## 🏃‍♂️ Quick Reference
 
-| Command                 | Purpose                  |
-| ----------------------- | ------------------------ |
-| `npm test`              | Run tests in watch mode  |
-| `npm run test:run`      | Run tests once           |
-| `npm run test:coverage` | Generate coverage report |
-| `npm run test:ui`       | Open test UI interface   |
+| Command                 | Purpose                     |
+| ----------------------- | --------------------------- |
+| `npm test`              | Run tests in watch mode     |
+| `npm run test:run`      | Run tests once              |
+| `npm run test:coverage` | Generate coverage report    |
+| `npm run test:ui`       | Open test UI interface      |
+| `npm run lint`          | Check CSS + JavaScript code |
+| `npm run format:check`  | Verify code formatting      |
+| `npm run format`        | Auto-format all files       |
 
 For questions or contributions to the testing setup, please refer to the main [README.md](../README.md) or open an issue.
 
-**Last updated**: December 2024
+**Last updated**: October 2024
