@@ -1,6 +1,8 @@
 import { defineConfig } from "vite";
 import replace from "@rollup/plugin-replace";
 
+// Only `mode` is used here because the configuration only depends on the build mode.
+// If you need to use the `command` parameter (e.g., 'serve' or 'build'), add it to the function signature.
 export default defineConfig(({ mode }) => ({
   // Base path for deployment (adjust if deploying to a subdirectory)
   base: "./",
