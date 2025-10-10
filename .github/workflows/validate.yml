@@ -2,7 +2,7 @@ name: Fast Validation
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, dev] # Support PRs to both main and dev branches
   push:
     branches: [dev]
 
@@ -45,14 +45,51 @@ jobs:
             exit 1
           fi
 
+      - name: Code Quality & Linting
+        run: |
+          echo "Running code quality checks..."
+
+          # Check code formatting
+          npm run format:check
+          echo "✓ Code formatting validation passed"
+
+          # Run all linting (CSS + JavaScript)
+          npm run lint
+          echo "✓ Linting validation passed"
+
+      - name: Test Suite
+        run: |
+          echo "Running comprehensive test suite..."
+
+          # Run all tests with coverage
+          npm run test:run
+          echo "✓ All unit tests passed successfully"
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium firefox
+
+      - name: E2E Test Suite
+        run: |
+          echo "Running End-to-End test suite..."
+
+          # Set CI environment and run E2E tests
+          export CI=true
+          npm run test:e2e:ci
+          echo "✓ All E2E tests passed successfully"
+
+      - name: Upload E2E Test Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
       - name: Validate CSS & Documentation
         run: |
           # Quick CSS check
           if [ -f "src/style.css" ]; then
             echo "✓ CSS file exists"
-            # Run CSS linting (fast)
-            npm run lint:css
-            echo "✓ CSS validation passed"
           else
             echo "✗ src/style.css not found"
             exit 1
