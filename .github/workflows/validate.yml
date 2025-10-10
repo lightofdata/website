@@ -72,7 +72,8 @@ jobs:
         run: |
           echo "Running End-to-End test suite..."
 
-          # Run E2E tests with CI configuration
+          # Set CI environment and run E2E tests
+          export CI=true
           npm run test:e2e:ci
           echo "✓ All E2E tests passed successfully"
 
