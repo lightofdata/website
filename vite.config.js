@@ -2,7 +2,10 @@ import { defineConfig } from "vite";
 import replace from "@rollup/plugin-replace";
 
 // Only `mode` is used here because the configuration only depends on the build mode.
-// If you need to use the `command` parameter (e.g., 'serve' or 'build'), add it to the function signature.
+// If you need to customize the config based on the Vite command (e.g., 'serve' for dev server or 'build' for production build),
+// add the `command` parameter to the function signature: ({ command, mode }) => ({ ... }).
+// For example, use `command` if you want to enable plugins only during development, change server options for 'serve',
+// or adjust build settings for 'build'. See https://vitejs.dev/config/#conditional-config for details.
 export default defineConfig(({ mode }) => ({
   // Base path for deployment (adjust if deploying to a subdirectory)
   base: "./",
