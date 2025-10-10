@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <!-- Google Consent Mode v2 -->
@@ -579,7 +579,11 @@
 
     <footer class="footer">
       <div class="footer-content">
-        <span>© 2025 Light Of Data Ltd</span> |
+        <span>©<span id="footer-year"></span>Light Of Data Ltd</span> |
+        <script>
+          document.getElementById("footer-year").textContent =
+            new Date().getFullYear();
+        </script>
         <span>Company #: 14811585</span> | <span>VAT #: GB438798236</span> |
         <span>
           <button
