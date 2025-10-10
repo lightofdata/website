@@ -2,7 +2,7 @@ name: Fast Validation
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, dev] # Support PRs to both main and dev branches
   push:
     branches: [dev]
 
