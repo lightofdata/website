@@ -579,13 +579,19 @@
 
     <footer class="footer">
       <div class="footer-content">
-        <span>©<span id="footer-year"></span>Light Of Data Ltd</span> |
+        <span class="footer-item"
+          >© <span id="footer-year"></span> Light Of Data Ltd</span
+        >
         <script>
           document.getElementById("footer-year").textContent =
             new Date().getFullYear();
         </script>
-        <span>Company #: 14811585</span> | <span>VAT #: GB438798236</span> |
-        <span>
+        <span class="footer-separator">|</span>
+        <span class="footer-item">Company #: 14811585</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-item">VAT #: GB438798236</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-item">
           <button
             id="cookie-preferences-btn"
             class="cookie-preferences-btn"

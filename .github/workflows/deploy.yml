@@ -1,5 +1,8 @@
 name: Deploy to GitHub Pages
 
+# This workflow handles deployment to GitHub Pages
+# - On push to main: Run full test suite + deploy
+# - On PR to main: Only build (validation is handled by validate.yml)
 on:
   push:
     branches: [main]
@@ -30,9 +33,11 @@ jobs:
         run: npm ci
 
       - name: Install Playwright Browsers
+        if: github.event_name == 'push'
         run: npx playwright install --with-deps chromium firefox
 
       - name: Run Tests & Validation
+        if: github.event_name == 'push'
         run: |
           # Ensure code quality before deployment
           npm run format:check
@@ -40,6 +45,7 @@ jobs:
           npm run test:run
 
       - name: Run E2E Tests
+        if: github.event_name == 'push'
         run: |
           echo "Running E2E tests before production deployment..."
           npm run test:e2e:ci
@@ -50,7 +56,7 @@ jobs:
 
       - name: Upload E2E Test Report (Deploy)
         uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && github.event_name == 'push'
         with:
           name: playwright-report-deploy
           path: playwright-report/
