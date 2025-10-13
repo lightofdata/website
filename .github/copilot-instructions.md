@@ -72,3 +72,10 @@ npm run test:e2e:mobile # Mobile-specific E2E tests
 - **GitHub Pages**: Automatic deployment via GitHub Actions on `main` branch pushes
 - **Asset Optimization**: Images hashed and moved to `images/` directory during build
 - **Base Path**: Set to `"./"` for subdirectory deployment compatibility
+
+### GitHub Actions Workflow Architecture
+
+- **validate.yml**: Fast validation on PRs to `main`/`dev` and pushes to `dev` (comprehensive testing)
+- **deploy.yml**: Deployment workflow - full tests only on push to `main`, build-only on PRs
+- **codeql.yml**: Security analysis on pushes to `main`/`dev` and PRs to `main`
+- **Workflow Separation**: Prevents duplicate test execution by conditioning test runs on event type
