@@ -48,6 +48,10 @@ export default [
         localStorage: "readonly",
         navigator: "readonly",
         gtag: "readonly",
+        setTimeout: "readonly",
+        clearTimeout: "readonly",
+        setInterval: "readonly",
+        clearInterval: "readonly",
       },
     },
     rules: {

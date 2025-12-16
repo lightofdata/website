@@ -10,7 +10,6 @@
       href="/images/small/png/logo-small-light-t.png"
     />
     <link rel="stylesheet" href="/src/style.css" />
-    <script src="/src/theme.js"></script>
 
     <script>
       // Page-specific initialization
@@ -554,21 +553,7 @@
       </div>
     </footer>
 
-    <script>
-      // Mobile menu toggle
-      const menuToggle = document.getElementById("menu-toggle");
-      const navLinks = document.getElementById("nav-links");
-
-      menuToggle.addEventListener("click", () => {
-        navLinks.classList.toggle("active");
-      });
-
-      // Close mobile menu when clicking on a link
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          navLinks.classList.remove("active");
-        });
-      });
-    </script>
+    <script src="/src/theme.js"></script>
+    <script src="/src/navigation.js"></script>
   </body>
 </html>

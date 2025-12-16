@@ -93,61 +93,11 @@
       href="/images/small/png/logo-small-light-t.png"
     />
     <link rel="stylesheet" href="/src/style.css" />
-    <script src="/src/theme.js"></script>
 
     <script>
       // Page-specific initialization
       document.addEventListener("DOMContentLoaded", () => {
-        // Mobile menu toggle
-        const menuToggle = document.getElementById("menu-toggle");
-        const navLinks = document.getElementById("nav-links");
-
-        // Toggle menu when hamburger is clicked
-        menuToggle.addEventListener("click", () => {
-          navLinks.classList.toggle("open");
-          menuToggle.classList.toggle("active");
-        });
-
-        // Close menu when any navigation link is clicked
-        const MENU_CLOSE_DELAY = 250; // ms
-        const navLinkItems = navLinks.querySelectorAll("li a");
-        const navHeight = document.querySelector("nav").offsetHeight || 60;
-        navLinkItems.forEach((link) => {
-          link.addEventListener("click", (e) => {
-            e.preventDefault();
-
-            // Close the menu immediately
-            navLinks.classList.remove("open");
-            menuToggle.classList.remove("active");
-
-            // Get target and scroll smoothly after menu closes
-            const targetId = link.getAttribute("href");
-            const targetElement = document.querySelector(targetId);
-
-            if (targetElement) {
-              setTimeout(() => {
-                const targetTop = targetElement.offsetTop - navHeight - 10;
-
-                window.scrollTo({
-                  top: Math.max(0, targetTop),
-                  behavior: "smooth",
-                });
-              }, MENU_CLOSE_DELAY); // Wait for menu close animation
-            }
-          });
-        });
-
-        // Handle logo click separately (no menu closing needed)
-        const logoLink = document.querySelector(".logo a");
-        if (logoLink) {
-          logoLink.addEventListener("click", (e) => {
-            e.preventDefault();
-            window.scrollTo({
-              top: 0,
-              behavior: "smooth",
-            });
-          });
-        }
+        // Mobile menu is now handled by /src/navigation.js
 
         // Cookie Consent Management
         const COOKIE_CONSENT_KEY = "cookie-consent-preferences";
@@ -694,5 +644,8 @@
         </div>
       </div>
     </div>
+
+    <script src="/src/theme.js"></script>
+    <script src="/src/navigation.js"></script>
   </body>
 </html>
