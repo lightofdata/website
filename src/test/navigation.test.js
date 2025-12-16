@@ -24,6 +24,7 @@ describe("Mobile Navigation Menu", () => {
             <li><a href="#home">Home</a></li>
             <li><a href="#about-title">About</a></li>
             <li><a href="#services-title">Services</a></li>
+            <li><a href="#projects-title">Projects</a></li>
             <li><a href="#contact-title">Contact</a></li>
           </ul>
         </div>
@@ -32,6 +33,7 @@ describe("Mobile Navigation Menu", () => {
       <section id="home" style="height: 100px;">Home Section</section>
       <section id="about-title" style="height: 100px;">About Section</section>
       <section id="services-title" style="height: 100px;">Services Section</section>
+      <section id="projects-title" style="height: 100px;">Projects Section</section>
       <section id="contact-title" style="height: 100px;">Contact Section</section>
     `;
 
@@ -44,7 +46,8 @@ describe("Mobile Navigation Menu", () => {
         if (this.id === "home") return 0;
         if (this.id === "about-title") return 500;
         if (this.id === "services-title") return 1000;
-        if (this.id === "contact-title") return 1500;
+        if (this.id === "projects-title") return 1500;
+        if (this.id === "contact-title") return 2000;
         return 0;
       },
       configurable: true,
@@ -268,6 +271,7 @@ describe("Mobile Navigation Menu", () => {
         "#home",
         "#about-title",
         "#services-title",
+        "#projects-title",
         "#contact-title",
       ];
 

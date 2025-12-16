@@ -355,6 +355,15 @@ html[data-theme="dark"] .service {
 html[data-theme="dark"] .contact-email {
   color: #bec7cf !important;
 }
+html[data-theme="dark"] .section a {
+  color: #5ca8e0 !important;
+}
+html[data-theme="dark"] .section a:visited {
+  color: #8f9de0 !important;
+}
+html[data-theme="dark"] .section a:hover {
+  color: #7fc4f7 !important;
+}
 
 html {
   scroll-behavior: smooth;
