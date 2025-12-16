@@ -93,55 +93,11 @@
       href="/images/small/png/logo-small-light-t.png"
     />
     <link rel="stylesheet" href="/src/style.css" />
+    <script src="/src/theme.js"></script>
 
     <script>
-      // Dark mode toggle logic
-      const updateGithubIcon = (theme) => {
-        const icon = document.getElementById("github-icon");
-        if (!icon) return;
-        icon.src =
-          theme === "dark"
-            ? "/images/github-mark-white.svg"
-            : "/images/github-mark.svg";
-      };
-      const updateLinkedInIcon = (theme) => {
-        const icon = document.getElementById("linkedin-icon");
-        if (!icon) return;
-        icon.src =
-          theme === "dark"
-            ? "/images/InBug-White.png"
-            : "/images/InBug-Black.png";
-      };
-      const updateHeadIcon = (theme) => {
-        let link = document.querySelector("link[rel~='icon']");
-        if (!link) {
-          link = document.createElement("link");
-          link.rel = "icon";
-          document.getElementsByTagName("head")[0].appendChild(link);
-        }
-        link.href =
-          theme === "dark"
-            ? "/images/small/png/logo-small-light-t.png?v=dark"
-            : "/images/small/png/logo-small-dark-t.png?v=light";
-      };
-      const setTheme = (theme, manual = false) => {
-        document.documentElement.setAttribute("data-theme", theme);
-        updateGithubIcon(theme);
-        updateLinkedInIcon(theme);
-        if (!manual) updateHeadIcon(theme);
-      };
-      const toggleTheme = () => {
-        const current = document.documentElement.getAttribute("data-theme");
-        setTheme(current === "dark" ? "light" : "dark", true);
-      };
-      // On load, set theme from system and update icons after DOM is ready
+      // Page-specific initialization
       document.addEventListener("DOMContentLoaded", () => {
-        const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
-        setTheme(systemDark.matches ? "dark" : "light");
-        // Listen for system theme changes if user hasn't chosen manually
-        systemDark.addEventListener("change", (e) => {
-          setTheme(e.matches ? "dark" : "light");
-        });
         // Mobile menu toggle
         const menuToggle = document.getElementById("menu-toggle");
         const navLinks = document.getElementById("nav-links");
@@ -437,6 +393,7 @@
           <li><a href="#home">Home</a></li>
           <li><a href="#about-title">About</a></li>
           <li><a href="#services-title">Services</a></li>
+          <li><a href="#projects-title">Projects</a></li>
           <li><a href="#contact-title">Contact</a></li>
         </ul>
         <button
@@ -524,6 +481,33 @@
       </div>
     </section>
 
+    <section class="section" id="projects">
+      <h2 id="projects-title">Projects</h2>
+      <div class="services">
+        <div class="service">
+          <h3>Time Tracker</h3>
+          <p>
+            A privacy-focused time tracking application currently in testing.
+          </p>
+          <p>
+            Track your time efficiently with a clean, intuitive interface
+            designed for productivity.
+          </p>
+          <p style="margin-top: 1rem; font-style: italic; color: #666">
+            Coming soon - Currently in beta testing
+          </p>
+          <p style="margin-top: 0.5rem">
+            <a
+              href="/time-tracker-privacy.html"
+              style="color: #1a6a7e; text-decoration: none; font-weight: 500"
+            >
+              Privacy Policy →
+            </a>
+          </p>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="contact">
       <h2 id="contact-title">Contact & Links</h2>
       <div class="contact-links-row">
@@ -599,6 +583,15 @@
           >
             Cookie Preferences
           </button>
+        </span>
+        <span class="footer-separator">|</span>
+        <span class="footer-item">
+          <a
+            href="/time-tracker-privacy.html"
+            style="color: inherit; text-decoration: none"
+          >
+            Time Tracker Privacy
+          </a>
         </span>
       </div>
     </footer>
