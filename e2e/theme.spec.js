@@ -66,7 +66,9 @@ test.describe("Theme Switching", () => {
     await expect(html).toHaveAttribute("data-theme", "light");
   });
 
-  test("should respect system theme preference on reload", async ({ page }) => {
+  test("should persist manual theme choice across reloads", async ({
+    page,
+  }) => {
     await page.goto("/");
 
     // Handle cookie consent
@@ -79,16 +81,24 @@ test.describe("Theme Switching", () => {
     await themeToggle.click();
     await expect(html).toHaveAttribute("data-theme", "dark");
 
-    // Reload page - should return to system preference (light by default)
+    // Reload page - manual choice should persist
     await page.reload();
 
     // Handle cookie consent again after reload
     await handleCookieConsent(page);
 
-    // Should return to system preference (light)
+    // Should still be dark (manual choice persists)
+    await expect(html).toHaveAttribute("data-theme", "dark");
+
+    // Clear localStorage to test system preference fallback
+    await page.evaluate(() => localStorage.clear());
+    await page.reload();
+    await handleCookieConsent(page);
+
+    // Should respect system preference (light by default) after clearing localStorage
     await expect(html).toHaveAttribute("data-theme", "light");
 
-    // Test with system dark mode preference
+    // Test with system dark mode preference when no manual choice
     await page.emulateMedia({ colorScheme: "dark" });
     await page.reload();
     await handleCookieConsent(page);
