@@ -38,8 +38,8 @@ const setTheme = (theme, manual = false) => {
   }
 };
 
-// eslint-disable-next-line no-unused-vars
-const toggleTheme = () => {
+// Expose toggleTheme globally for onclick handlers in HTML
+window.toggleTheme = () => {
   const current = document.documentElement.getAttribute("data-theme");
   setTheme(current === "dark" ? "light" : "dark", true);
 };
