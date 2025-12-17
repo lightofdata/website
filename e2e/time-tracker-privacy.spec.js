@@ -1,21 +1,8 @@
 import { test, expect } from "@playwright/test";
 
-// Helper function to handle cookie consent (for tests that load pages mid-test)
-async function handleCookieConsent(page) {
-  const cookieDialog = page.locator("#cookie-consent-overlay");
-  const dialogVisible = await cookieDialog.isVisible().catch(() => false);
-
-  if (dialogVisible) {
-    const acceptButton = page.locator("#cookie-accept-all");
-    if (await acceptButton.isVisible()) {
-      await acceptButton.click();
-      await cookieDialog.waitFor({ state: "hidden", timeout: 2000 });
-    }
-  }
-}
-
 // Helper function to pre-set cookie consent in localStorage (prevents dialog from appearing)
 async function presetCookieConsent(page, url = "/") {
+  // First navigation: Load page to get access to localStorage
   await page.goto(url);
   await page.evaluate(() => {
     localStorage.setItem(
@@ -28,13 +15,15 @@ async function presetCookieConsent(page, url = "/") {
       })
     );
   });
+  // Second navigation: Reload page with consent already set
+  // This ensures the page's cookie consent logic sees the preference on load
+  // and skips showing the dialog entirely
   await page.goto(url);
 }
 
 test.describe("Time Tracker Privacy Policy Page", () => {
   test("should load privacy policy page successfully", async ({ page }) => {
-    await page.goto("/time-tracker-privacy.html");
-    await handleCookieConsent(page);
+    await presetCookieConsent(page, "/time-tracker-privacy.html");
 
     // Check page title
     await expect(page).toHaveTitle(/Time Tracker.*Privacy Policy/);
@@ -47,8 +36,7 @@ test.describe("Time Tracker Privacy Policy Page", () => {
   });
 
   test("should have proper privacy policy structure", async ({ page }) => {
-    await page.goto("/time-tracker-privacy.html");
-    await handleCookieConsent(page);
+    await presetCookieConsent(page, "/time-tracker-privacy.html");
 
     // Check for key sections
     await expect(
@@ -70,8 +58,7 @@ test.describe("Time Tracker Privacy Policy Page", () => {
   });
 
   test("should display effective date", async ({ page }) => {
-    await page.goto("/time-tracker-privacy.html");
-    await handleCookieConsent(page);
+    await presetCookieConsent(page, "/time-tracker-privacy.html");
 
     // Check for date information
     const content = await page.textContent("body");
@@ -80,8 +67,7 @@ test.describe("Time Tracker Privacy Policy Page", () => {
   });
 
   test("should have working navigation back to main site", async ({ page }) => {
-    await page.goto("/time-tracker-privacy.html");
-    await handleCookieConsent(page);
+    await presetCookieConsent(page, "/time-tracker-privacy.html");
 
     // Check navigation links exist (use first to avoid strict mode violation)
     const homeLink = page.locator('a[href="/#home"]').first();
@@ -98,8 +84,7 @@ test.describe("Time Tracker Privacy Policy Page", () => {
   test("should have consistent theme toggle functionality", async ({
     page,
   }) => {
-    await page.goto("/time-tracker-privacy.html");
-    await handleCookieConsent(page);
+    await presetCookieConsent(page, "/time-tracker-privacy.html");
 
     const themeToggle = page.locator("#theme-toggle");
     const html = page.locator("html");
@@ -151,8 +136,7 @@ test.describe("Time Tracker Privacy Policy Page", () => {
   });
 
   test("should have accessible contact information", async ({ page }) => {
-    await page.goto("/time-tracker-privacy.html");
-    await handleCookieConsent(page);
+    await presetCookieConsent(page, "/time-tracker-privacy.html");
 
     // Check for contact email (use first to avoid strict mode violation)
     const emailLink = page.locator('a[href*="mailto"]').first();
@@ -166,8 +150,7 @@ test.describe("Time Tracker Privacy Policy Page", () => {
   test("should have links to third-party privacy policies", async ({
     page,
   }) => {
-    await page.goto("/time-tracker-privacy.html");
-    await handleCookieConsent(page);
+    await presetCookieConsent(page, "/time-tracker-privacy.html");
 
     // Check for external policy links
     const content = await page.textContent("body");
@@ -190,8 +173,7 @@ test.describe("Time Tracker Privacy Policy Page", () => {
 
   test("should be mobile responsive", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
-    await page.goto("/time-tracker-privacy.html");
-    await handleCookieConsent(page);
+    await presetCookieConsent(page, "/time-tracker-privacy.html");
 
     // Content should be visible
     const section = page.locator("section").first();
@@ -231,7 +213,6 @@ test.describe("Projects Section Integration", () => {
   test("should navigate from footer to privacy policy", async ({ page }) => {
     // Pre-set cookie consent to prevent dialog from appearing
     await presetCookieConsent(page, "/");
-    await handleCookieConsent(page);
 
     // Find footer link
     const footerPrivacyLink = page
@@ -250,7 +231,6 @@ test.describe("Projects Section Integration", () => {
   test("should show Projects in navigation menu", async ({ page }) => {
     // Pre-set cookie consent to prevent dialog from appearing
     await presetCookieConsent(page, "/");
-    await handleCookieConsent(page);
 
     const projectsLink = page.locator('a[href="#projects-title"]');
 
@@ -273,7 +253,6 @@ test.describe("Projects Section Integration", () => {
   test("should display Time Tracker project card", async ({ page }) => {
     // Pre-set cookie consent to prevent dialog from appearing
     await presetCookieConsent(page, "/");
-    await handleCookieConsent(page);
 
     // Scroll to projects
     await page.locator("#projects-title").scrollIntoViewIfNeeded();
@@ -291,8 +270,7 @@ test.describe("Projects Section Integration", () => {
 test.describe("Cross-Page Theme Consistency", () => {
   test("should maintain consistent styling across pages", async ({ page }) => {
     // Check main page
-    await page.goto("/");
-    await handleCookieConsent(page);
+    await presetCookieConsent(page, "/");
 
     const mainNavBg = await page
       .locator("nav")
@@ -311,8 +289,7 @@ test.describe("Cross-Page Theme Consistency", () => {
 
   test("should load shared theme.js on both pages", async ({ page }) => {
     // Test on main page
-    await page.goto("/");
-    await handleCookieConsent(page);
+    await presetCookieConsent(page, "/");
 
     let toggleThemeExists = await page.evaluate(
       () => typeof toggleTheme === "function"
@@ -331,8 +308,7 @@ test.describe("Cross-Page Theme Consistency", () => {
 
 test.describe("Privacy Policy Content Quality", () => {
   test("should have GDPR compliance sections", async ({ page }) => {
-    await page.goto("/time-tracker-privacy.html");
-    await handleCookieConsent(page);
+    await presetCookieConsent(page, "/time-tracker-privacy.html");
 
     const content = await page.textContent("body");
 
@@ -343,8 +319,7 @@ test.describe("Privacy Policy Content Quality", () => {
   });
 
   test("should have data retention information", async ({ page }) => {
-    await page.goto("/time-tracker-privacy.html");
-    await handleCookieConsent(page);
+    await presetCookieConsent(page, "/time-tracker-privacy.html");
 
     // Check for data retention section
     await expect(
@@ -358,8 +333,7 @@ test.describe("Privacy Policy Content Quality", () => {
   });
 
   test("should explain data collection clearly", async ({ page }) => {
-    await page.goto("/time-tracker-privacy.html");
-    await handleCookieConsent(page);
+    await presetCookieConsent(page, "/time-tracker-privacy.html");
 
     // Should have numbered or structured information collection
     await expect(
