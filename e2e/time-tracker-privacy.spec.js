@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-// Helper function to handle cookie consent
+// Helper function to handle cookie consent (for tests that load pages mid-test)
 async function handleCookieConsent(page) {
   const cookieDialog = page.locator("#cookie-consent-overlay");
   const dialogVisible = await cookieDialog.isVisible().catch(() => false);
@@ -12,6 +12,23 @@ async function handleCookieConsent(page) {
       await cookieDialog.waitFor({ state: "hidden", timeout: 2000 });
     }
   }
+}
+
+// Helper function to pre-set cookie consent in localStorage (prevents dialog from appearing)
+async function presetCookieConsent(page, url = "/") {
+  await page.goto(url);
+  await page.evaluate(() => {
+    localStorage.setItem(
+      "cookie-consent-preferences",
+      JSON.stringify({
+        version: "1.0",
+        necessary: true,
+        analytics: false,
+        timestamp: new Date().toISOString(),
+      })
+    );
+  });
+  await page.goto(url);
 }
 
 test.describe("Time Tracker Privacy Policy Page", () => {
@@ -103,9 +120,8 @@ test.describe("Time Tracker Privacy Policy Page", () => {
   });
 
   test("should persist theme across navigation", async ({ page }) => {
-    // Start on main page
-    await page.goto("/");
-    await handleCookieConsent(page);
+    // Pre-set cookie consent to prevent dialog from appearing
+    await presetCookieConsent(page, "/");
 
     const html = page.locator("html");
     const themeToggle = page.locator("#theme-toggle");
@@ -118,15 +134,17 @@ test.describe("Time Tracker Privacy Policy Page", () => {
     const privacyLink = page
       .locator('a[href="/time-tracker-privacy.html"]')
       .first();
+
+    // Ensure link is in viewport and stable before clicking
+    await privacyLink.scrollIntoViewIfNeeded();
     await privacyLink.click();
     await page.waitForURL("**/time-tracker-privacy.html");
 
     // Theme should still be dark
     await expect(html).toHaveAttribute("data-theme", "dark");
 
-    // Navigate back to main page
+    // Navigate back to main page (consent is already in localStorage)
     await page.goto("/");
-    await handleCookieConsent(page);
 
     // Theme should still be dark
     await expect(html).toHaveAttribute("data-theme", "dark");
@@ -191,8 +209,8 @@ test.describe("Time Tracker Privacy Policy Page", () => {
 
 test.describe("Projects Section Integration", () => {
   test("should navigate from main page to privacy policy", async ({ page }) => {
-    await page.goto("/");
-    await handleCookieConsent(page);
+    // Pre-set cookie consent to prevent dialog from appearing
+    await presetCookieConsent(page, "/");
 
     // Scroll to Projects section
     await page.locator("#projects-title").scrollIntoViewIfNeeded();
@@ -211,7 +229,8 @@ test.describe("Projects Section Integration", () => {
   });
 
   test("should navigate from footer to privacy policy", async ({ page }) => {
-    await page.goto("/");
+    // Pre-set cookie consent to prevent dialog from appearing
+    await presetCookieConsent(page, "/");
     await handleCookieConsent(page);
 
     // Find footer link
@@ -229,7 +248,8 @@ test.describe("Projects Section Integration", () => {
   });
 
   test("should show Projects in navigation menu", async ({ page }) => {
-    await page.goto("/");
+    // Pre-set cookie consent to prevent dialog from appearing
+    await presetCookieConsent(page, "/");
     await handleCookieConsent(page);
 
     const projectsLink = page.locator('a[href="#projects-title"]');
@@ -251,7 +271,8 @@ test.describe("Projects Section Integration", () => {
   });
 
   test("should display Time Tracker project card", async ({ page }) => {
-    await page.goto("/");
+    // Pre-set cookie consent to prevent dialog from appearing
+    await presetCookieConsent(page, "/");
     await handleCookieConsent(page);
 
     // Scroll to projects
