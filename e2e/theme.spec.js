@@ -1,45 +1,5 @@
 import { test, expect } from "@playwright/test";
-
-// Helper function to handle cookie consent
-async function handleCookieConsent(page) {
-  try {
-    const cookieOverlay = page.locator("#cookie-consent-overlay");
-    // Wait up to 5 seconds for the cookie dialog to appear
-    await cookieOverlay.waitFor({ timeout: 5000, state: "visible" });
-
-    // Click the "Accept All" button
-    const acceptButton = page.locator('button:has-text("Accept All")');
-    await acceptButton.click();
-
-    // Wait for the dialog to disappear
-    await cookieOverlay.waitFor({ timeout: 10000, state: "hidden" });
-
-    // Add a small delay to ensure the DOM is stable
-    await page.waitForTimeout(500);
-  } catch {
-    // If no cookie dialog appears within timeout, continue
-    console.log("No cookie dialog found or already handled");
-  }
-}
-
-// Helper function to handle mobile menu navigation
-async function ensureMobileMenuOpen(page) {
-  const menuToggle = page.locator(".menu-toggle");
-  if (await menuToggle.isVisible()) {
-    // If menu toggle is visible (mobile view), ensure menu is open
-    const navList = page.locator("nav ul");
-    if (!(await navList.isVisible())) {
-      await menuToggle.click();
-      await navList.waitFor({ state: "visible" });
-    }
-  }
-}
-
-// Helper function to click navigation link in mobile view
-async function clickMobileNavLink(page, href) {
-  await ensureMobileMenuOpen(page);
-  await page.click(`a[href="${href}"]`);
-}
+import { handleCookieConsent, clickMobileNavLink } from "./test-helpers.js";
 
 test.describe("Theme Switching", () => {
   test("should toggle between light and dark themes", async ({ page }) => {
@@ -68,6 +28,7 @@ test.describe("Theme Switching", () => {
 
   test("should persist manual theme choice across reloads", async ({
     page,
+    context,
   }) => {
     await page.goto("/");
 
