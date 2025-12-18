@@ -28,6 +28,10 @@ export default defineConfig(({ mode }) => ({
     // Ensure CSS and JS are inlined for better performance on simple sites
     cssCodeSplit: false,
     rollupOptions: {
+      input: {
+        main: "./index.html",
+        "time-tracker-privacy": "./time-tracker-privacy.html",
+      },
       output: {
         // Customize asset file names
         assetFileNames: (assetInfo) => {
