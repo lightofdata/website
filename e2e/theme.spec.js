@@ -28,7 +28,6 @@ test.describe("Theme Switching", () => {
 
   test("should persist manual theme choice across reloads", async ({
     page,
-    context,
   }) => {
     await page.goto("/");
 
