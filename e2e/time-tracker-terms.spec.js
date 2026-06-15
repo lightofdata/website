@@ -5,9 +5,6 @@ test.describe("Time Tracker Terms of Use Page", () => {
   test("should load terms page successfully", async ({ page }) => {
     await page.goto("/time-tracker-terms.html");
 
-    // Handle cookie consent
-    await handleCookieConsent(page);
-
     // Check page title
     await expect(page).toHaveTitle(/Time Tracker.*Terms/);
 
@@ -20,9 +17,6 @@ test.describe("Time Tracker Terms of Use Page", () => {
 
   test("should have proper terms structure", async ({ page }) => {
     await page.goto("/time-tracker-terms.html");
-
-    // Handle cookie consent
-    await handleCookieConsent(page);
 
     // Check for key sections
     await expect(
@@ -58,9 +52,6 @@ test.describe("Time Tracker Terms of Use Page", () => {
   test("should display effective date", async ({ page }) => {
     await page.goto("/time-tracker-terms.html");
 
-    // Handle cookie consent
-    await handleCookieConsent(page);
-
     const content = await page.textContent("body");
     expect(content).toContain("Last Updated");
     expect(content).toContain("June 15, 2026");
@@ -69,11 +60,8 @@ test.describe("Time Tracker Terms of Use Page", () => {
   test("should have working navigation back to main site", async ({ page }) => {
     await page.goto("/time-tracker-terms.html");
 
-    // Handle cookie consent
-    await handleCookieConsent(page);
-
     // Check navigation links exist (use first to avoid strict mode violation)
-    const homeLink = page.locator('a[href="/#home"]').first();
+    const homeLink = page.locator('a[href="./#home"]').first();
     await expect(homeLink).toBeVisible();
 
     // Click home link
@@ -92,9 +80,6 @@ test.describe("Time Tracker Terms of Use Page", () => {
     await page.goto("/time-tracker-terms.html");
     await page.evaluate(() => localStorage.clear());
     await page.reload();
-
-    // Handle cookie consent
-    await handleCookieConsent(page);
 
     const themeToggle = page.locator("#theme-toggle");
     const html = page.locator("html");
@@ -129,7 +114,7 @@ test.describe("Time Tracker Terms of Use Page", () => {
 
     // Navigate to terms page
     const termsLink = page
-      .locator('a[href="/time-tracker-terms.html"]')
+      .locator('a[href="./time-tracker-terms.html"]')
       .first();
 
     await termsLink.scrollIntoViewIfNeeded();
@@ -149,9 +134,6 @@ test.describe("Time Tracker Terms of Use Page", () => {
   test("should have accessible contact information", async ({ page }) => {
     await page.goto("/time-tracker-terms.html");
 
-    // Handle cookie consent
-    await handleCookieConsent(page);
-
     // Check for contact email (use first to avoid strict mode violation)
     const emailLink = page.locator('a[href*="mailto"]').first();
     await expect(emailLink).toBeVisible();
@@ -164,12 +146,9 @@ test.describe("Time Tracker Terms of Use Page", () => {
   test("should have link to privacy policy", async ({ page }) => {
     await page.goto("/time-tracker-terms.html");
 
-    // Handle cookie consent
-    await handleCookieConsent(page);
-
     // Terms should reference the privacy policy
     const privacyLink = page
-      .locator('a[href="/time-tracker-privacy.html"]')
+      .locator('a[href="./time-tracker-privacy.html"]')
       .first();
     await expect(privacyLink).toBeVisible();
   });
@@ -177,9 +156,6 @@ test.describe("Time Tracker Terms of Use Page", () => {
   test("should be mobile responsive", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto("/time-tracker-terms.html");
-
-    // Handle cookie consent
-    await handleCookieConsent(page);
 
     // Content should be visible
     const section = page.locator("section").first();
@@ -208,7 +184,7 @@ test.describe("Projects Section Integration", () => {
     // Find and click terms link in Projects section
     const termsLink = page
       .locator("#projects")
-      .locator('a[href="/time-tracker-terms.html"]');
+      .locator('a[href="./time-tracker-terms.html"]');
     await expect(termsLink).toBeVisible();
 
     await termsLink.click();
@@ -223,12 +199,9 @@ test.describe("Projects Section Integration", () => {
   }) => {
     await page.goto("/time-tracker-privacy.html");
 
-    // Handle cookie consent
-    await handleCookieConsent(page);
-
     // Privacy policy links to terms in the consent section
     const termsLink = page
-      .locator('a[href="/time-tracker-terms.html"]')
+      .locator('a[href="./time-tracker-terms.html"]')
       .first();
     await termsLink.scrollIntoViewIfNeeded();
     await expect(termsLink).toBeVisible();
@@ -254,10 +227,10 @@ test.describe("Projects Section Integration", () => {
       projectsSection.getByRole("heading", { name: "Time Tracker" })
     ).toBeVisible();
     await expect(
-      projectsSection.locator('a[href="/time-tracker-privacy.html"]')
+      projectsSection.locator('a[href="./time-tracker-privacy.html"]')
     ).toBeVisible();
     await expect(
-      projectsSection.locator('a[href="/time-tracker-terms.html"]')
+      projectsSection.locator('a[href="./time-tracker-terms.html"]')
     ).toBeVisible();
   });
 });
@@ -309,9 +282,6 @@ test.describe("Terms of Use Content Quality", () => {
   test("should have subscription information", async ({ page }) => {
     await page.goto("/time-tracker-terms.html");
 
-    // Handle cookie consent
-    await handleCookieConsent(page);
-
     const content = await page.textContent("body");
 
     // Check for subscription-related content
@@ -326,9 +296,6 @@ test.describe("Terms of Use Content Quality", () => {
   }) => {
     await page.goto("/time-tracker-terms.html");
 
-    // Handle cookie consent
-    await handleCookieConsent(page);
-
     const content = await page.textContent("body");
 
     // Check for platform-specific cancellation steps
@@ -339,18 +306,12 @@ test.describe("Terms of Use Content Quality", () => {
   test("should specify governing law", async ({ page }) => {
     await page.goto("/time-tracker-terms.html");
 
-    // Handle cookie consent
-    await handleCookieConsent(page);
-
     const content = await page.textContent("body");
     expect(content).toContain("England and Wales");
   });
 
   test("should have company registration information", async ({ page }) => {
     await page.goto("/time-tracker-terms.html");
-
-    // Handle cookie consent
-    await handleCookieConsent(page);
 
     const content = await page.textContent("body");
     expect(content).toContain("Light of Data Ltd");
@@ -361,9 +322,6 @@ test.describe("Terms of Use Content Quality", () => {
     page,
   }) => {
     await page.goto("/time-tracker-terms.html");
-
-    // Handle cookie consent
-    await handleCookieConsent(page);
 
     const content = await page.textContent("body");
     expect(content).toContain("30 days");
