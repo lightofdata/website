@@ -50,6 +50,8 @@ jobs:
           echo "Running E2E tests before production deployment..."
           npm run test:e2e:ci
           echo "✓ E2E tests passed - safe to deploy"
+        env:
+          NODE_OPTIONS: "--no-deprecation"
 
       - name: Build
         run: npm run build

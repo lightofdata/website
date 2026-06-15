@@ -76,6 +76,8 @@ jobs:
           export CI=true
           npm run test:e2e:ci
           echo "✓ All E2E tests passed successfully"
+        env:
+          NODE_OPTIONS: "--no-deprecation"
 
       - name: Upload E2E Test Report
         uses: actions/upload-artifact@v4
