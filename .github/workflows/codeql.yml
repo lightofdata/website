@@ -10,7 +10,7 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
-    timeout-minutes: 10 # Reduced from 360 minutes to 10 minutes
+    timeout-minutes: 30 # Increased for CodeQL analysis
     permissions:
       actions: read
       contents: read

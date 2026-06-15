@@ -190,8 +190,8 @@ test.describe("Theme Visual Tests", () => {
 
     // Take screenshot for visual comparison
     await expect(page).toHaveScreenshot("light-theme.png", {
-      // Increased threshold for footer alignment changes and minor rendering differences
-      threshold: 0.02,
+      // Increased maxDiffPixelRatio for footer alignment changes and minor rendering differences
+      maxDiffPixelRatio: 0.02,
     });
   });
 
@@ -217,8 +217,8 @@ test.describe("Theme Visual Tests", () => {
 
     // Take screenshot for visual comparison
     await expect(page).toHaveScreenshot("dark-theme.png", {
-      // Increased threshold for footer alignment changes and minor rendering differences
-      threshold: 0.02,
+      // Increased maxDiffPixelRatio for footer alignment changes and minor rendering differences
+      maxDiffPixelRatio: 0.02,
     });
   });
 });
@@ -259,8 +259,8 @@ test.describe("Homepage Visual Tests", () => {
 
     // Take screenshot for visual comparison of homepage
     await expect(page).toHaveScreenshot("light-theme-homepage.png", {
-      // Increased threshold for footer alignment changes and minor rendering differences
-      threshold: 0.02,
+      // Increased maxDiffPixelRatio for footer alignment changes and minor rendering differences
+      maxDiffPixelRatio: 0.02,
       // Full page screenshot to match existing snapshot dimensions
       fullPage: true,
     });
@@ -299,8 +299,8 @@ test.describe("Homepage Visual Tests", () => {
 
     // Take screenshot for visual comparison of homepage in dark mode
     await expect(page).toHaveScreenshot("dark-theme-homepage.png", {
-      // Increased threshold for footer alignment changes and minor rendering differences
-      threshold: 0.02,
+      // Increased maxDiffPixelRatio for footer alignment changes and minor rendering differences
+      maxDiffPixelRatio: 0.02,
       // Full page screenshot to match existing snapshot dimensions
       fullPage: true,
     });

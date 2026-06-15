@@ -9,7 +9,7 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10 # Timeout after 10 minutes
+    timeout-minutes: 30 # Increased for Playwright installation + E2E tests
 
     steps:
       - uses: actions/checkout@v4
@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "20.19"
           cache: "npm"
 
       - name: Install dependencies
@@ -76,6 +76,8 @@ jobs:
           export CI=true
           npm run test:e2e:ci
           echo "✓ All E2E tests passed successfully"
+        env:
+          NODE_OPTIONS: "--no-deprecation"
 
       - name: Upload E2E Test Report
         uses: actions/upload-artifact@v4

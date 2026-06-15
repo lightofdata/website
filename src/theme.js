@@ -2,17 +2,21 @@
 const updateGithubIcon = (theme) => {
   const icon = document.getElementById("github-icon");
   if (!icon) return;
+  const baseUrl = import.meta.env.BASE_URL;
   icon.src =
     theme === "dark"
-      ? "/images/github-mark-white.svg"
-      : "/images/github-mark.svg";
+      ? `${baseUrl}images/github-mark-white.svg`
+      : `${baseUrl}images/github-mark.svg`;
 };
 
 const updateLinkedInIcon = (theme) => {
   const icon = document.getElementById("linkedin-icon");
   if (!icon) return;
+  const baseUrl = import.meta.env.BASE_URL;
   icon.src =
-    theme === "dark" ? "/images/InBug-White.png" : "/images/InBug-Black.png";
+    theme === "dark"
+      ? `${baseUrl}images/InBug-White.png`
+      : `${baseUrl}images/InBug-Black.png`;
 };
 
 const updateHeadIcon = (theme) => {
@@ -22,10 +26,11 @@ const updateHeadIcon = (theme) => {
     link.rel = "icon";
     document.getElementsByTagName("head")[0].appendChild(link);
   }
+  const baseUrl = import.meta.env.BASE_URL;
   link.href =
     theme === "dark"
-      ? "/images/small/png/logo-small-light-t.png?v=dark"
-      : "/images/small/png/logo-small-dark-t.png?v=light";
+      ? `${baseUrl}images/small/png/logo-small-light-t.png?v=dark`
+      : `${baseUrl}images/small/png/logo-small-dark-t.png?v=light`;
 };
 
 const setTheme = (theme, manual = false) => {

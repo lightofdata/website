@@ -31,6 +31,7 @@ export default defineConfig(({ mode }) => ({
       input: {
         main: "./index.html",
         "time-tracker-privacy": "./time-tracker-privacy.html",
+        "time-tracker-terms": "./time-tracker-terms.html",
       },
       output: {
         // Customize asset file names
