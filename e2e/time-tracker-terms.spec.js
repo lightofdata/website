@@ -87,7 +87,11 @@ test.describe("Time Tracker Terms of Use Page", () => {
   test("should have consistent theme toggle functionality", async ({
     page,
   }) => {
+    // Force light color scheme and clear storage for deterministic test
+    await page.emulateMedia({ colorScheme: "light" });
     await page.goto("/time-tracker-terms.html");
+    await page.evaluate(() => localStorage.clear());
+    await page.reload();
 
     // Handle cookie consent
     await handleCookieConsent(page);
@@ -98,16 +102,16 @@ test.describe("Time Tracker Terms of Use Page", () => {
     // Theme toggle should be visible
     await expect(themeToggle).toBeVisible();
 
-    // Get initial theme
-    const initialTheme = await html.getAttribute("data-theme");
+    // Initial theme should be light (deterministic)
+    await expect(html).toHaveAttribute("data-theme", "light");
 
-    // Toggle theme
+    // Toggle to dark theme
     await themeToggle.click();
-    const newTheme = await html.getAttribute("data-theme");
+    await expect(html).toHaveAttribute("data-theme", "dark");
 
-    // Theme should have changed
-    expect(newTheme).not.toBe(initialTheme);
-    expect(["light", "dark"]).toContain(newTheme);
+    // Toggle back to light theme
+    await themeToggle.click();
+    await expect(html).toHaveAttribute("data-theme", "light");
   });
 
   test("should persist theme across navigation", async ({ page }) => {
