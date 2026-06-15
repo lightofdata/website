@@ -61,12 +61,12 @@ test.describe("Time Tracker Terms of Use Page", () => {
     await page.goto("/time-tracker-terms.html");
 
     // Check navigation links exist (use first to avoid strict mode violation)
-    const homeLink = page.locator('a[href="./#home"]').first();
+    const homeLink = page.locator('a[href="./index.html#home"]').first();
     await expect(homeLink).toBeVisible();
 
     // Click home link
     await homeLink.click();
-    await page.waitForURL("**/#home");
+    await page.waitForURL("**/index.html#home");
 
     // Verify we're on the main page
     await expect(page.locator(".hero")).toBeVisible();
