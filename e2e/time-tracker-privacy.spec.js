@@ -52,7 +52,7 @@ test.describe("Time Tracker Privacy Policy Page", () => {
     // Check for date information
     const content = await page.textContent("body");
     expect(content).toContain("Last Updated");
-    expect(content).toContain("December 16, 2024");
+    expect(content).toContain("June 15, 2026");
   });
 
   test("should have working navigation back to main site", async ({ page }) => {
@@ -62,12 +62,12 @@ test.describe("Time Tracker Privacy Policy Page", () => {
     await handleCookieConsent(page);
 
     // Check navigation links exist (use first to avoid strict mode violation)
-    const homeLink = page.locator('a[href="/#home"]').first();
+    const homeLink = page.locator('a[href="./index.html#home"]').first();
     await expect(homeLink).toBeVisible();
 
     // Click home link
     await homeLink.click();
-    await page.waitForURL("**/#home");
+    await page.waitForURL("**/index.html#home");
 
     // Verify we're on the main page
     await expect(page.locator(".hero")).toBeVisible();
@@ -114,7 +114,7 @@ test.describe("Time Tracker Privacy Policy Page", () => {
 
     // Navigate to privacy policy
     const privacyLink = page
-      .locator('a[href="/time-tracker-privacy.html"]')
+      .locator('a[href="./time-tracker-privacy.html"]')
       .first();
 
     // Ensure link is in viewport and stable before clicking
@@ -208,7 +208,7 @@ test.describe("Projects Section Integration", () => {
     // Find and click privacy policy link in Projects section
     const privacyLink = page
       .locator("#projects")
-      .locator('a[href="/time-tracker-privacy.html"]');
+      .locator('a[href="./time-tracker-privacy.html"]');
     await expect(privacyLink).toBeVisible();
 
     await privacyLink.click();
@@ -227,7 +227,7 @@ test.describe("Projects Section Integration", () => {
     // Find footer link
     const footerPrivacyLink = page
       .locator(".footer")
-      .locator('a[href="/time-tracker-privacy.html"]');
+      .locator('a[href="./time-tracker-privacy.html"]');
     await footerPrivacyLink.scrollIntoViewIfNeeded();
     await expect(footerPrivacyLink).toBeVisible();
 

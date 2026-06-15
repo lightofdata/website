@@ -10,28 +10,30 @@ describe("Dark Mode and Theme Functionality", () => {
     // Setup DOM elements needed for theme functionality
     document.body.innerHTML = `
       <button id="theme-toggle" onclick="toggleTheme()">🌓</button>
-      <img id="github-icon" src="/images/github-mark.svg" alt="GitHub" />
-      <img id="linkedin-icon" src="/images/InBug-Black.png" alt="LinkedIn" />
-      <link rel="icon" type="image/png" href="/images/small/png/logo-small-light-t.png" />
+      <img id="github-icon" src="./images/github-mark.svg" alt="GitHub" />
+      <img id="linkedin-icon" src="./images/InBug-Black.png" alt="LinkedIn" />
+      <link rel="icon" type="image/png" href="./images/small/png/logo-small-light-t.png" />
     `;
 
     // Define theme functions globally for testing
     global.updateGithubIcon = (theme) => {
       const icon = document.getElementById("github-icon");
       if (!icon) return;
+      const baseUrl = "./";
       icon.src =
         theme === "dark"
-          ? "/images/github-mark-white.svg"
-          : "/images/github-mark.svg";
+          ? `${baseUrl}images/github-mark-white.svg`
+          : `${baseUrl}images/github-mark.svg`;
     };
 
     global.updateLinkedInIcon = (theme) => {
       const icon = document.getElementById("linkedin-icon");
       if (!icon) return;
+      const baseUrl = "./";
       icon.src =
         theme === "dark"
-          ? "/images/InBug-White.png"
-          : "/images/InBug-Black.png";
+          ? `${baseUrl}images/InBug-White.png`
+          : `${baseUrl}images/InBug-Black.png`;
     };
 
     global.updateHeadIcon = (theme) => {
@@ -41,10 +43,11 @@ describe("Dark Mode and Theme Functionality", () => {
         link.rel = "icon";
         document.getElementsByTagName("head")[0].appendChild(link);
       }
+      const baseUrl = "./";
       link.href =
         theme === "dark"
-          ? "/images/small/png/logo-small-light-t.png?v=dark"
-          : "/images/small/png/logo-small-dark-t.png?v=light";
+          ? `${baseUrl}images/small/png/logo-small-light-t.png?v=dark`
+          : `${baseUrl}images/small/png/logo-small-dark-t.png?v=light`;
     };
 
     global.setTheme = (theme, manual = false) => {
