@@ -8,8 +8,8 @@ on:
 
 jobs:
   validate:
-    runs-on: [self-hosted, linux, x64]
-    timeout-minutes: 10 # Timeout after 10 minutes
+    runs-on: ubuntu-latest
+    timeout-minutes: 30 # Increased for Playwright installation + E2E tests
 
     steps:
       - uses: actions/checkout@v4
