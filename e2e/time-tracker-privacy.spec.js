@@ -52,7 +52,7 @@ test.describe("Time Tracker Privacy Policy Page", () => {
     // Check for date information
     const content = await page.textContent("body");
     expect(content).toContain("Last Updated");
-    expect(content).toContain("December 16, 2024");
+    expect(content).toContain("June 15, 2026");
   });
 
   test("should have working navigation back to main site", async ({ page }) => {
