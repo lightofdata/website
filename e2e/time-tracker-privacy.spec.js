@@ -52,7 +52,7 @@ test.describe("Time Tracker Privacy Policy Page", () => {
     // Check for date information
     const content = await page.textContent("body");
     expect(content).toContain("Last Updated");
-    expect(content).toContain("June 15, 2026");
+    expect(content).toContain("August 23, 2026");
   });
 
   test("should have working navigation back to main site", async ({ page }) => {
@@ -356,6 +356,38 @@ test.describe("Privacy Policy Content Quality", () => {
     expect(content).toContain("days");
   });
 
+  test("should disclose subscription and purchase data", async ({ page }) => {
+    await page.goto("/time-tracker-privacy.html");
+
+    // Handle cookie consent
+    await handleCookieConsent(page);
+
+    // The subscription subsection must exist under Information We Collect
+    await expect(
+      page.getByRole("heading", { name: /Subscription and Purchase/i })
+    ).toBeVisible();
+
+    // Source wraps prose across lines, so compare on collapsed whitespace
+    const content = (await page.textContent("body")).replace(/\s+/g, " ");
+
+    // Purchase data collection, and who processes it
+    expect(content).toContain("RevenueCat");
+    expect(content).toContain("Purchase history");
+    expect(content).toContain("seller of record");
+
+    // The two claims the stores look for
+    expect(content).toContain("We never receive or store your payment details");
+    expect(content).toContain("does not cancel a subscription");
+
+    // RevenueCat policy link, opened safely
+    const revenueCatLink = page.locator(
+      'a[href="https://www.revenuecat.com/privacy"]'
+    );
+    await expect(revenueCatLink).toBeVisible();
+    expect(await revenueCatLink.getAttribute("rel")).toContain("noopener");
+    expect(await revenueCatLink.getAttribute("target")).toBe("_blank");
+  });
+
   test("should explain data collection clearly", async ({ page }) => {
     await page.goto("/time-tracker-privacy.html");
 
@@ -368,6 +400,19 @@ test.describe("Privacy Policy Content Quality", () => {
     ).toBeVisible();
     await expect(
       page.getByRole("heading", { name: /Time Tracking Data/i })
+    ).toBeVisible();
+
+    // Source wraps prose across lines, so compare on collapsed whitespace
+    const content = (await page.textContent("body")).replace(/\s+/g, " ");
+
+    // Crash reporting is disclosed, and the no-analytics claim is explicit
+    expect(content).toContain("Firebase Crashlytics");
+    expect(content).toContain("does not use an analytics SDK");
+
+    // Google account access is for calendar only, and revocable
+    expect(content).toContain("it is not how you sign in");
+    await expect(
+      page.locator('a[href="https://myaccount.google.com/permissions"]')
     ).toBeVisible();
   });
 });

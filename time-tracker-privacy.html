@@ -65,7 +65,7 @@
       <h1>Privacy Policy for Time Tracker</h1>
 
       <p style="font-style: italic; opacity: 0.7; margin-bottom: 2rem">
-        <strong>Last Updated:</strong> June 15, 2026
+        <strong>Last Updated:</strong> August 23, 2026
       </p>
 
       <h2>Introduction</h2>
@@ -156,6 +156,12 @@
         <li>App version information</li>
         <li>Error logs and crash reports (to improve app stability)</li>
       </ul>
+      <p>
+        Crash reports and error logs are collected through Firebase Crashlytics,
+        which receives a crash stack trace together with basic device and app
+        information. The app does not use an analytics SDK, and we do not
+        collect screen views, feature usage, or other behavioural analytics.
+      </p>
 
       <h3>5. Local Storage</h3>
       <p>The app uses local storage on your device to:</p>
@@ -164,6 +170,43 @@
         <li>Store app preferences and settings</li>
         <li>Enable offline time tracking</li>
       </ul>
+
+      <h3>6. Subscription and Purchase Information</h3>
+      <p>
+        Time Tracker offers an optional paid subscription. If you subscribe, we
+        collect:
+      </p>
+      <ul>
+        <li>Your subscription status, plan, and renewal or expiry dates</li>
+        <li>
+          Purchase history for this app, including transaction identifiers
+        </li>
+        <li>
+          A pseudonymous app user identifier, which is the same account
+          identifier used to store your time tracking data
+        </li>
+      </ul>
+      <p>
+        <strong>We never receive or store your payment details.</strong> Card
+        numbers, billing addresses, and similar payment information are handled
+        entirely by Apple or Google as the seller of record, and are never sent
+        to us.
+      </p>
+      <p>
+        We use RevenueCat to record which accounts hold an active subscription.
+        When you sign in, the app sends your Time Tracker account identifier to
+        RevenueCat so your subscription follows your account across your devices
+        and can be restored after a reinstall. Your email address and name are
+        not sent. RevenueCat also receives purchase and subscription details
+        from Apple and Google, together with basic device and app information
+        collected by its SDK.
+      </p>
+      <p>
+        <strong
+          >Subscribing is optional. If you never subscribe, no purchase
+          information is collected.</strong
+        >
+      </p>
 
       <h2>How We Use Your Information</h2>
       <p>We use the collected information to:</p>
@@ -187,6 +230,15 @@
         <li>
           <strong>Authentication:</strong> Verify your identity using your email
           and password
+        </li>
+        <li>
+          <strong>Improve Stability:</strong> Use crash reports and error logs
+          to diagnose and fix bugs
+        </li>
+        <li>
+          <strong>Subscription Management:</strong> Determine whether your
+          account has an active subscription, unlock paid features, and restore
+          previous purchases
         </li>
       </ol>
 
@@ -217,8 +269,9 @@
           your device and our servers uses HTTPS/TLS encryption
         </li>
         <li>
-          <strong>Authentication:</strong> Secure authentication with encrypted
-          password storage
+          <strong>Authentication:</strong> Handled by Supabase Auth. Your
+          password is sent to Supabase over an encrypted connection and is never
+          stored by the app on your device
         </li>
         <li>
           <strong>Database Security:</strong> Supabase provides row-level
@@ -245,6 +298,15 @@
           <strong>Local Data:</strong> Cached data on your device is deleted
           when you uninstall the app or clear app data
         </li>
+        <li>
+          <strong>Subscription Records:</strong> Purchase and subscription
+          records are retained by RevenueCat and by Apple or Google for as long
+          as required for billing, tax, and dispute-resolution purposes, which
+          may be longer than the 30-day deletion window above. Deleting your
+          Time Tracker account removes your data from our servers but does not
+          cancel a subscription &mdash; cancel that through your Apple or Google
+          account.
+        </li>
       </ul>
 
       <h2>Data Sharing and Third Parties</h2>
@@ -260,8 +322,11 @@
       <h3>Third-Party Services We Use</h3>
       <ol>
         <li>
-          <strong>Supabase:</strong> For cloud data storage and synchronization
-          (<a href="https://supabase.com/privacy" target="_blank" rel="noopener"
+          <strong>Supabase:</strong> For cloud data storage, synchronization,
+          and authentication (<a
+            href="https://supabase.com/privacy"
+            target="_blank"
+            rel="noopener"
             >Supabase Privacy Policy</a
           >)
         </li>
@@ -290,6 +355,30 @@
             target="_blank"
             rel="noopener"
             >Google API Services User Data Policy</a
+          >)
+        </li>
+        <li>
+          <strong>RevenueCat:</strong> For managing subscription status and
+          restoring purchases (<a
+            href="https://www.revenuecat.com/privacy"
+            target="_blank"
+            rel="noopener"
+            >RevenueCat Privacy Policy</a
+          >)
+        </li>
+        <li>
+          <strong>Apple App Store and Google Play:</strong> As the payment
+          processors and sellers of record for subscriptions (<a
+            href="https://www.apple.com/legal/privacy/"
+            target="_blank"
+            rel="noopener"
+            >Apple Privacy Policy</a
+          >,
+          <a
+            href="https://policies.google.com/privacy"
+            target="_blank"
+            rel="noopener"
+            >Google Privacy Policy</a
           >)
         </li>
       </ol>
@@ -333,6 +422,23 @@
         </li>
         <li>Choose which calendars to sync with</li>
       </ul>
+      <p>
+        Granting calendar access is the only thing Time Tracker uses your Google
+        account for &mdash; it is not how you sign in. To revoke that access:
+      </p>
+      <ol>
+        <li>
+          Visit your
+          <a
+            href="https://myaccount.google.com/permissions"
+            target="_blank"
+            rel="noopener"
+            >Google Account settings</a
+          >
+        </li>
+        <li>Find "Time Tracker" in the list of apps</li>
+        <li>Click "Remove Access"</li>
+      </ol>
 
       <h2>Children's Privacy</h2>
       <p>
