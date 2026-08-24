@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Time Tracker - Delete Your Account and Data | Light of Data</title>
+    <meta
+      name="description"
+      content="How to delete your Time Tracker account, and how to delete individual time entries, clients and projects without deleting your account."
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="./images/small/png/logo-small-light-t.png"
+    />
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+
+  <body>
+    <nav class="navbar">
+      <div class="container">
+        <div class="logo">
+          <a
+            href="./index.html#home"
+            style="text-decoration: none; display: flex; align-items: center"
+          >
+            <img
+              src="./images/small/png/logo-small-light-t.png"
+              alt="Light of Data logo"
+              style="height: 40px; width: auto; vertical-align: middle"
+            />
+          </a>
+        </div>
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
+          <span class="menu-icon">&#9776;</span>
+        </button>
+        <ul class="nav-links" id="nav-links">
+          <li><a href="./index.html#home">Home</a></li>
+          <li><a href="./index.html#about-title">About</a></li>
+          <li><a href="./index.html#services-title">Services</a></li>
+          <li><a href="./index.html#projects-title">Projects</a></li>
+          <li><a href="./index.html#contact-title">Contact</a></li>
+        </ul>
+        <button
+          id="theme-toggle"
+          onclick="toggleTheme()"
+          aria-label="Toggle dark mode"
+          title="Toggle dark mode"
+          style="
+            margin-left: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            background: #1a6a7e;
+            color: #222;
+            font-weight: 600;
+          "
+        >
+          🌓
+        </button>
+      </div>
+    </nav>
+
+    <section
+      class="section"
+      style="max-width: 800px; margin: 2rem auto; padding: 0 1rem"
+    >
+      <h1>Delete Your Time Tracker Account and Data</h1>
+
+      <p style="font-style: italic; opacity: 0.7; margin-bottom: 2rem">
+        <strong>Last Updated:</strong> August 24, 2026
+      </p>
+
+      <h2>App and Developer</h2>
+      <p>
+        <strong>App Name:</strong> Time Tracker<br />
+        <strong>Developer:</strong> Light of Data Ltd<br />
+        <strong>Contact:</strong>
+        <a href="mailto:support@lightofdata.earth">support@lightofdata.earth</a>
+      </p>
+      <p>
+        This page explains two separate things: how to delete your Time Tracker
+        account entirely, and how to delete individual pieces of your data
+        without deleting your account. Choose whichever matches what you want to
+        do.
+      </p>
+
+      <h2>Delete Your Account</h2>
+      <p>
+        Deleting your account removes your account and all of the time tracking
+        data associated with it. This cannot be undone.
+      </p>
+
+      <h3>If you still have the app installed</h3>
+      <ol>
+        <li>Open Time Tracker and make sure you are signed in.</li>
+        <li>Go to <strong>Settings</strong>.</li>
+        <li>Open <strong>Account</strong>.</li>
+        <li>Select <strong>Delete Account</strong>.</li>
+        <li>
+          Type <strong>DELETE</strong> to confirm, then select
+          <strong>Delete Account</strong>. Deletion runs immediately and signs
+          you out.
+        </li>
+      </ol>
+
+      <h3>If you have already uninstalled the app</h3>
+      <p>
+        Email
+        <a href="mailto:support@lightofdata.earth">support@lightofdata.earth</a>
+        from the email address you used to sign in, and ask us to delete your
+        account. We will confirm the request from that address before acting on
+        it, and confirm to you once the deletion is complete.
+      </p>
+
+      <h3>What is deleted</h3>
+      <ul>
+        <li>
+          <strong>Your account:</strong> your Time Tracker account and its
+          sign-in credentials.
+        </li>
+        <li>
+          <strong>All of your time tracking data on our servers:</strong> your
+          clients, projects, tasks, time entries and app settings are hard
+          deleted from our database &mdash; not flagged or archived.
+        </li>
+        <li>
+          <strong>Your Google Calendar connection:</strong> if you had calendar
+          sync enabled, it is disconnected. You can also revoke Time Tracker's
+          calendar access yourself from your
+          <a
+            href="https://myaccount.google.com/permissions"
+            target="_blank"
+            rel="noopener"
+            >Google Account permissions</a
+          >.
+        </li>
+        <li>
+          <strong>The local copy on your device:</strong> synchronisation is
+          disconnected and the app's local database file is deleted from the
+          device you deleted the account from.
+        </li>
+      </ul>
+
+      <h3>What is kept, and for how long</h3>
+      <ul>
+        <li>
+          <strong>Subscription and purchase records:</strong> if you have ever
+          subscribed, records of those purchases are retained by RevenueCat and
+          by Apple or Google for as long as required for billing, tax, and
+          dispute-resolution purposes. Those records are held by those
+          providers, not by us, and deleting your Time Tracker account does not
+          remove them.
+        </li>
+        <li>
+          <strong>Backups:</strong> your data is deleted from our live servers
+          immediately. Copies may persist in routine backups, which age out
+          within 7 days, and are never restored to the live service.
+        </li>
+      </ul>
+      <p>
+        <strong>Deleting your account does not cancel a subscription.</strong>
+        Subscriptions are billed by Apple or Google, so cancel through your
+        Apple ID or Google Play account before deleting your account, otherwise
+        billing continues.
+      </p>
+      <p>
+        This matches the retention terms in our
+        <a
+          href="./time-tracker-privacy.html"
+          style="color: #1a6a7e; text-decoration: none; font-weight: 500"
+          >Privacy Policy</a
+        >.
+      </p>
+
+      <h2>Delete Some of Your Data Without Deleting Your Account</h2>
+      <p>
+        You do not have to delete your account to remove data. You can delete
+        individual records at any time from inside the app, and keep the account
+        itself.
+      </p>
+      <ul>
+        <li>
+          <strong>Time entries:</strong> delete any entry from the time entry
+          list or from the entry's own screen.
+        </li>
+        <li>
+          <strong>Clients and projects:</strong> delete a client or a project
+          from its list in the app.
+        </li>
+        <li>
+          <strong>Tasks:</strong> delete a task from the project it belongs to.
+        </li>
+        <li>
+          <strong>Calendar sync:</strong> turn calendar synchronisation off in
+          Settings at any time.
+        </li>
+      </ul>
+      <p>
+        These deletions are synchronised to our servers, so the record is
+        removed from the cloud database as well as from your device, on every
+        device signed in to your account.
+      </p>
+      <p>
+        If there is data you cannot remove yourself, email
+        <a href="mailto:support@lightofdata.earth">support@lightofdata.earth</a>
+        from your account's email address and tell us what you want deleted.
+        This route is for partial deletion only &mdash; it leaves your account
+        in place. To remove everything, use the account deletion steps above.
+      </p>
+
+      <h2>Export Your Timesheet Reports</h2>
+      <p>
+        Before deleting anything, you may want a copy of your work. From the
+        <strong>Reports</strong> screen you can export a timesheet report as
+        <strong>CSV</strong> or <strong>PDF</strong> and share or save the file
+        from your device.
+      </p>
+      <p>
+        This is a timesheet report export, not a complete export of your
+        account. It covers the time entries in the report you generate, in a
+        fixed timesheet layout; it does not export your client and project
+        records, your app settings, or your calendar associations. If you need a
+        copy of data the report export does not cover, contact us at
+        <a href="mailto:support@lightofdata.earth">support@lightofdata.earth</a>
+        and we will help.
+      </p>
+
+      <h2>Questions</h2>
+      <p>
+        For anything about deleting your account or your data, contact
+        <a href="mailto:support@lightofdata.earth">support@lightofdata.earth</a
+        >. See also our
+        <a
+          href="./time-tracker-privacy.html"
+          style="color: #1a6a7e; text-decoration: none; font-weight: 500"
+          >Privacy Policy</a
+        >
+        and
+        <a
+          href="./time-tracker-terms.html"
+          style="color: #1a6a7e; text-decoration: none; font-weight: 500"
+          >Terms of Use</a
+        >.
+      </p>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <span class="footer-item"
+          >© <span id="footer-year"></span> Light Of Data Ltd</span
+        >
+        <script>
+          document.getElementById("footer-year").textContent =
+            new Date().getFullYear();
+        </script>
+        <span class="footer-separator">|</span>
+        <span class="footer-item">Company #: 14811585</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-item">VAT #: GB438798236</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-item">
+          <a href="./index.html" style="color: inherit; text-decoration: none">
+            Back to Home
+          </a>
+        </span>
+      </div>
+    </footer>
+
+    <script type="module" src="./src/theme.js"></script>
+    <script type="module" src="./src/navigation.js"></script>
+  </body>
+</html>

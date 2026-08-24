@@ -323,7 +323,11 @@ test.describe("Terms of Use Content Quality", () => {
   }) => {
     await page.goto("/time-tracker-terms.html");
 
-    const content = await page.textContent("body");
-    expect(content).toContain("30 days");
+    // Must match time-tracker-privacy.html and
+    // time-tracker-delete-account.html: live deletion is immediate, and only
+    // backups carry the 7-day window.
+    const content = (await page.textContent("body")).replace(/\s+/g, " ");
+    expect(content).toMatch(/live servers immediately/i);
+    expect(content).toMatch(/within 7 days/i);
   });
 });
