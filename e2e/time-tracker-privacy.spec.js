@@ -350,10 +350,12 @@ test.describe("Privacy Policy Content Quality", () => {
       page.getByRole("heading", { name: /data retention/i })
     ).toBeVisible();
 
-    // Check for specific content about account deletion and time period
-    const content = await page.textContent("body");
-    expect(content).toContain("30");
-    expect(content).toContain("days");
+    // Check for specific content about account deletion and time period.
+    // The wording must match time-tracker-delete-account.html: deletion from
+    // the live database is immediate, and only backups carry the 7-day window.
+    const content = (await page.textContent("body")).replace(/\s+/g, " ");
+    expect(content).toMatch(/live servers immediately/i);
+    expect(content).toMatch(/age out within 7 days/i);
   });
 
   test("should disclose subscription and purchase data", async ({ page }) => {
@@ -378,6 +380,13 @@ test.describe("Privacy Policy Content Quality", () => {
     // The two claims the stores look for
     expect(content).toContain("We never receive or store your payment details");
     expect(content).toContain("does not cancel a subscription");
+
+    // The carve-out must point at the retention windows generically, not at a
+    // hard-coded figure that goes stale when the backup window changes
+    expect(content).toMatch(
+      /longer than the deletion and backup windows above/i
+    );
+    expect(content).not.toMatch(/30-day deletion window/i);
 
     // RevenueCat policy link, opened safely
     const revenueCatLink = page.locator(
