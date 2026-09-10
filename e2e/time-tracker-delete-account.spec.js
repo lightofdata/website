@@ -66,7 +66,7 @@ test.describe("Time Tracker Account Deletion Page", () => {
     // Every deletion path sends an automatic confirmation email, so the page
     // must say so - and must not promise a separate manual reply as well
     expect(content).toMatch(
-      /a confirmation email is sent to your account's email address/i
+      /a confirmation email is sent to your account's confirmed email address/i
     );
     expect(content).toMatch(/confirmation email is sent to that address/i);
     expect(content).not.toMatch(/confirm to you once the deletion/i);
