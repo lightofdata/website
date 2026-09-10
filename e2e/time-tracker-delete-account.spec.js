@@ -63,6 +63,13 @@ test.describe("Time Tracker Account Deletion Page", () => {
     // The confirmation dialog requires typing DELETE - a step someone
     // following this page literally must not be surprised by
     expect(content).toMatch(/Type DELETE to confirm/i);
+    // Every deletion path sends an automatic confirmation email, so the page
+    // must say so - and must not promise a separate manual reply as well
+    expect(content).toMatch(
+      /a confirmation email is sent to your account's email address/i
+    );
+    expect(content).toMatch(/confirmation email is sent to that address/i);
+    expect(content).not.toMatch(/confirm to you once the deletion/i);
 
     // A contact route must exist for users without the app
     await expect(
@@ -95,6 +102,10 @@ test.describe("Time Tracker Account Deletion Page", () => {
     // Same wording as time-tracker-privacy.html and time-tracker-terms.html.
     expect(content).toMatch(/live servers immediately/i);
     expect(content).toMatch(/age out within 7 days/i);
+    // The confirmation email outlives the account at the email provider.
+    // Same wording as time-tracker-privacy.html.
+    expect(content).toContain("Resend");
+    expect(content).toMatch(/delivery record/i);
   });
 
   test("should describe export as timesheet reports only", async ({ page }) => {
@@ -218,8 +229,10 @@ test.describe("Deletion wording consistency across legal pages", () => {
       expect(content).toMatch(/live servers immediately/i);
       // ... and only backup copies carry the 7-day window
       expect(content).toMatch(/age out within 7 days/i);
-      // No page may reintroduce the superseded figure
-      expect(content).not.toMatch(/30 days/i);
+      // No page may reintroduce the superseded "deleted from our servers
+      // within 30 days" window. Scoped to our own deletion, because Resend's
+      // 30-day email log retention is legitimately stated on two pages.
+      expect(content).not.toMatch(/(deleted|servers)[^.]*within 30 days/i);
     });
   }
 });

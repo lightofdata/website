@@ -52,7 +52,7 @@ test.describe("Time Tracker Privacy Policy Page", () => {
     // Check for date information
     const content = await page.textContent("body");
     expect(content).toContain("Last Updated");
-    expect(content).toContain("August 23, 2026");
+    expect(content).toContain("September 10, 2026");
   });
 
   test("should have working navigation back to main site", async ({ page }) => {
@@ -160,6 +160,14 @@ test.describe("Time Tracker Privacy Policy Page", () => {
     expect(content).toContain("Google");
     expect(content).toContain("Supabase");
     expect(content).toContain("Firebase");
+
+    // Resend delivers the sign-up, password-reset and deletion emails
+    const resendLink = page.locator(
+      'a[href="https://resend.com/legal/privacy-policy"]'
+    );
+    await expect(resendLink).toBeVisible();
+    expect(await resendLink.getAttribute("rel")).toContain("noopener");
+    expect(await resendLink.getAttribute("target")).toBe("_blank");
 
     // Verify external links are marked properly
     const externalLinks = page.locator('a[target="_blank"]');
@@ -356,6 +364,10 @@ test.describe("Privacy Policy Content Quality", () => {
     const content = (await page.textContent("body")).replace(/\s+/g, " ");
     expect(content).toMatch(/live servers immediately/i);
     expect(content).toMatch(/age out within 7 days/i);
+    // Matches time-tracker-delete-account.html: the confirmation email and
+    // its delivery record stay with Resend under Resend's retention
+    expect(content).toMatch(/confirmation email is sent/i);
+    expect(content).toMatch(/Resend[^.]*delivery record/i);
   });
 
   test("should disclose subscription and purchase data", async ({ page }) => {
