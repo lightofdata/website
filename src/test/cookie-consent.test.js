@@ -15,7 +15,7 @@ describe("Cookie Consent Management", () => {
     document.body.innerHTML = `
       <footer class="footer">
         <div class="footer-content">
-          <span>Light Of Data Ltd</span>
+          <span>Light of Data Ltd</span>
           <button id="cookie-preferences-btn" class="cookie-preferences-btn">
             🍪 Cookie Preferences
           </button>

@@ -42,7 +42,7 @@ describe("Projects Section", () => {
 
       <footer class="footer">
         <div class="footer-content">
-          <span>© 2025 Light Of Data Ltd</span>
+          <span>© 2025 Light of Data Ltd</span>
           <span class="footer-separator">|</span>
           <span class="footer-item">Company #: 14811585</span>
           <span class="footer-separator">|</span>
