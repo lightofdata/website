@@ -33,6 +33,7 @@ export default defineConfig(({ mode }) => ({
         "time-tracker-privacy": "./time-tracker-privacy.html",
         "time-tracker-terms": "./time-tracker-terms.html",
         "time-tracker-delete-account": "./time-tracker-delete-account.html",
+        "time-tracker-support": "./time-tracker-support.html",
       },
       output: {
         // Customize asset file names

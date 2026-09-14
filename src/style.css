@@ -366,6 +366,24 @@ html[data-theme="dark"] .section a:hover {
   color: #7fc4f7 !important;
 }
 
+/* App screenshots on the Time Tracker support page. Screenshots are cropped
+   to the relevant part of the screen, so each keeps its own aspect ratio
+   (from its width/height attributes). */
+.screenshot {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  margin: 1rem auto 1.5rem;
+  border: 1px solid #dde2e7;
+  border-radius: 16px;
+}
+
+html[data-theme="dark"] .screenshot {
+  border-color: #3a4048 !important;
+}
+
 html {
   scroll-behavior: smooth;
 }
