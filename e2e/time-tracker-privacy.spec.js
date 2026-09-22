@@ -432,6 +432,15 @@ test.describe("Privacy Policy Content Quality", () => {
     expect(content).toContain("30 days after your Pro subscription ends");
     expect(content).toContain("including the Limited Use requirements");
     expect(content).toContain("is not sent to AI providers");
+    // The server-side worker writes to Google and reads no calendar contents;
+    // it only checks that a calendar it created still exists (#59)
+    expect(content).toContain(
+      "Time Tracker does not read the contents of any calendar"
+    );
+    expect(content).toContain("whether a calendar it created still exists");
+    expect(content).not.toContain(
+      "lists the events in the calendars it created"
+    );
     // Calendar import and per-calendar choice are gone
     expect(content).not.toContain("Import time entries from calendar events");
     expect(content).not.toContain("Choose which calendars to sync with");
