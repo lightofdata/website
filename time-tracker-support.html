@@ -69,7 +69,7 @@
       <h1>Time Tracker Support</h1>
 
       <p style="font-style: italic; opacity: 0.7; margin-bottom: 2rem">
-        <strong>Last Updated:</strong> September 14, 2026
+        <strong>Last Updated:</strong> September 22, 2026
       </p>
 
       <h2>App and Developer</h2>
@@ -193,23 +193,35 @@
       <h4>How do I connect Google Calendar?</h4>
       <p>
         Calendar sync is a Pro feature. Go to <strong>Settings</strong> &gt;
-        <strong>Integrations</strong> &gt; <strong>Calendar Sync</strong>, turn
-        on <strong>Enable Calendar Sync</strong>, tick
-        <strong>Google Calendar</strong>, then select
-        <strong>Authenticate Google Calendar</strong> and sign in with your
-        Google account.
+        <strong>Integrations</strong> &gt; <strong>Calendar Sync</strong> and
+        select <strong>Connect Google</strong>, then choose your Google account
+        and allow access. Each client gets its own calendar in Google, and
+        finished time entries appear in it within a minute or two, even when the
+        app is closed. To leave a client out, open it and untick
+        <strong>Sync to Google Calendar</strong>. You can also delete its
+        calendar in Google at the same time.
       </p>
       <p>
         Sync is one way: your time entries are added to Google Calendar, but
-        changes you make in Google Calendar are not copied back into the app.
+        changes you make in Google Calendar are not copied back into the app. If
+        you delete a client's calendar in Google, the app turns off sync for
+        that client. Tick it again to create a new calendar.
       </p>
+      <img
+        class="screenshot"
+        src="./images/time-tracker/support/google-calendar-connect.png"
+        alt="Time Tracker Calendar Sync Settings screen, not yet connected, with the Connect Google button"
+        width="1008"
+        height="609"
+        loading="lazy"
+        data-screenshot="google-calendar-connect.png"
+      />
 
       <h4>How do I disconnect Google Calendar?</h4>
       <p>
-        In the same <strong>Calendar Sync</strong> screen, select
-        <strong>Sign Out</strong> under Google Calendar, or turn off
-        <strong>Enable Calendar Sync</strong>. You can also revoke Time
-        Tracker's calendar access at any time from your
+        On the same screen, select <strong>Disconnect</strong>. Calendars and
+        events already written stay in Google. You can also remove Time
+        Tracker's access from your
         <a
           href="https://myaccount.google.com/permissions"
           target="_blank"
@@ -219,12 +231,12 @@
       </p>
       <img
         class="screenshot"
-        src="./images/time-tracker/support/google-calendar-connect.png"
-        alt="Time Tracker Calendar Sync Settings screen with Google Calendar authenticated and the Sign Out button"
-        width="640"
-        height="1282"
+        src="./images/time-tracker/support/google-calendar-disconnect.png"
+        alt="Time Tracker Calendar Sync Settings screen, connected to Google, with the Disconnect button"
+        width="1008"
+        height="630"
         loading="lazy"
-        data-screenshot="google-calendar-connect.png"
+        data-screenshot="google-calendar-disconnect.png"
       />
 
       <h3>Exporting Reports</h3>
@@ -240,7 +252,7 @@
       <p>
         This is a timesheet report export, not a complete export of your
         account: it does not include your client and project records, app
-        settings or calendar associations. See
+        settings or calendar sync settings. See
         <a
           href="./time-tracker-delete-account.html"
           style="color: #1a6a7e; text-decoration: none; font-weight: 500"

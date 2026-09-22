@@ -54,6 +54,29 @@ test.describe("Time Tracker Support Page", () => {
     }
   });
 
+  // Calendar sync moved to the server in 1.6.0 (#55). The old client-side
+  // controls no longer exist, so the FAQ must not send users looking for them.
+  test("should describe server-side Google Calendar sync", async ({ page }) => {
+    await page.goto("/time-tracker-support.html");
+
+    const content = (await page.textContent("body")).replace(/\s+/g, " ");
+    expect(content).toContain(
+      "Settings > Integrations > Calendar Sync and select Connect Google"
+    );
+    expect(content).toContain("Sync to Google Calendar");
+    expect(content).toContain("even when the app is closed");
+    expect(content).toContain(
+      "Calendars and events already written stay in Google"
+    );
+    for (const removed of [
+      "Enable Calendar Sync",
+      "Authenticate Google Calendar",
+      "Sign Out",
+    ]) {
+      expect(content).not.toContain(removed);
+    }
+  });
+
   // Subscription wording is duplicated from the terms. Store reviewers compare
   // the two, so the support page must not drift from what the terms promise.
   test("should describe cancellation and refunds as the terms do", async ({
@@ -93,7 +116,7 @@ test.describe("Time Tracker Support Page", () => {
   }) => {
     await page.goto("/time-tracker-support.html");
 
-    await expect(page.locator("[data-screenshot]")).toHaveCount(4);
+    await expect(page.locator("[data-screenshot]")).toHaveCount(5);
     const order = await page
       .locator("[data-screenshot]")
       .evaluateAll((els) => els.map((el) => el.dataset.screenshot));
@@ -101,6 +124,7 @@ test.describe("Time Tracker Support Page", () => {
       "app-support-entry.png",
       "subscription-manage.png",
       "google-calendar-connect.png",
+      "google-calendar-disconnect.png",
       "reports-export.png",
     ]);
   });
@@ -114,6 +138,7 @@ test.describe("Time Tracker Support Page", () => {
       "app-support-entry.png",
       "subscription-manage.png",
       "google-calendar-connect.png",
+      "google-calendar-disconnect.png",
       "reports-export.png",
     ]) {
       const img = page.locator(`img[data-screenshot="${file}"]`);
