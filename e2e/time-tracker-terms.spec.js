@@ -56,6 +56,10 @@ test.describe("Time Tracker Terms of Use Page", () => {
 
     const content = (await page.textContent("body")).replace(/\s+/g, " ");
     expect(content).toContain("Generate AI summaries of your reports (Pro)");
+    expect(content).toContain(
+      "Optionally integrate with Google Calendar (Pro)"
+    );
+    expect(content).toContain("generated automatically when you ask for one");
     expect(content).toContain("may be inaccurate or incomplete");
     for (const service of ["RevenueCat", "Resend", "Anthropic"]) {
       expect(content).toContain(service);
