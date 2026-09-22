@@ -49,12 +49,29 @@ test.describe("Time Tracker Terms of Use Page", () => {
     await expect(page.getByRole("heading", { name: /Contact/i })).toBeVisible();
   });
 
+  test("should cover AI summaries and name the services it relies on", async ({
+    page,
+  }) => {
+    await page.goto("/time-tracker-terms.html");
+
+    const content = (await page.textContent("body")).replace(/\s+/g, " ");
+    expect(content).toContain("Generate AI summaries of your reports (Pro)");
+    expect(content).toContain(
+      "Optionally integrate with Google Calendar (Pro)"
+    );
+    expect(content).toContain("generated automatically when you ask for one");
+    expect(content).toContain("may be inaccurate or incomplete");
+    for (const service of ["RevenueCat", "Resend", "Anthropic"]) {
+      expect(content).toContain(service);
+    }
+  });
+
   test("should display effective date", async ({ page }) => {
     await page.goto("/time-tracker-terms.html");
 
     const content = await page.textContent("body");
     expect(content).toContain("Last Updated");
-    expect(content).toContain("June 15, 2026");
+    expect(content).toContain("September 22, 2026");
   });
 
   test("should have working navigation back to main site", async ({ page }) => {

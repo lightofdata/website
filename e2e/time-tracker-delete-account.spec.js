@@ -108,6 +108,22 @@ test.describe("Time Tracker Account Deletion Page", () => {
     expect(content).toMatch(/delivery record/i);
   });
 
+  // Calendar sync is server-side (#55): deleting the account revokes Google
+  // access but leaves the calendars Time Tracker wrote in Google.
+  test("should say calendars stay in Google after deletion", async ({
+    page,
+  }) => {
+    await page.goto("/time-tracker-delete-account.html");
+
+    const content = (await page.textContent("body")).replace(/\s+/g, " ");
+    expect(content).toContain("Time Tracker's access is revoked");
+    expect(content).toContain(
+      "The calendars and events it already wrote stay in your Google account"
+    );
+    expect(content).toContain("Sync to Google Calendar");
+    expect(content).not.toContain("calendar associations");
+  });
+
   test("should describe export as timesheet reports only", async ({ page }) => {
     await page.goto("/time-tracker-delete-account.html");
 

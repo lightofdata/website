@@ -52,7 +52,7 @@ test.describe("Time Tracker Privacy Policy Page", () => {
     // Check for date information
     const content = await page.textContent("body");
     expect(content).toContain("Last Updated");
-    expect(content).toContain("September 10, 2026");
+    expect(content).toContain("September 22, 2026");
   });
 
   test("should have working navigation back to main site", async ({ page }) => {
@@ -407,6 +407,47 @@ test.describe("Privacy Policy Content Quality", () => {
     await expect(revenueCatLink).toBeVisible();
     expect(await revenueCatLink.getAttribute("rel")).toContain("noopener");
     expect(await revenueCatLink.getAttribute("target")).toBe("_blank");
+  });
+
+  // Mirrors PRIVACY_POLICY.md in lightofdata/time_tracker (#55)
+  test("should disclose server-side calendar sync and AI summaries", async ({
+    page,
+  }) => {
+    await page.goto("/time-tracker-privacy.html");
+
+    await handleCookieConsent(page);
+
+    await expect(
+      page.getByRole("heading", { name: /Google Calendar \(Optional, Pro\)/i })
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /AI Summaries \(Optional\)/i })
+    ).toBeVisible();
+
+    const content = (await page.textContent("body")).replace(/\s+/g, " ");
+
+    // Narrow scope, server-side storage, and the Limited Use statement
+    expect(content).toContain("calendar.app.created");
+    expect(content).toContain("A refresh token from Google");
+    expect(content).toContain("30 days after your Pro subscription ends");
+    expect(content).toContain("including the Limited Use requirements");
+    expect(content).toContain("is not sent to AI providers");
+    // Calendar import and per-calendar choice are gone
+    expect(content).not.toContain("Import time entries from calendar events");
+    expect(content).not.toContain("Choose which calendars to sync with");
+    expect(content).toContain(
+      "Choose, per client, whether its entries are synced"
+    );
+
+    // AI summaries: what is sent, to whom, and only on request
+    expect(content).toContain("our server sends them to Anthropic");
+    expect(content).toContain("OpenAI, Anthropic, Google Gemini or OpenRouter");
+    expect(content).toContain("nothing is sent to an AI provider otherwise");
+    const anthropicLink = page.locator(
+      'a[href="https://www.anthropic.com/legal/privacy"]'
+    );
+    await expect(anthropicLink).toBeVisible();
+    expect(await anthropicLink.getAttribute("rel")).toContain("noopener");
   });
 
   test("should explain data collection clearly", async ({ page }) => {
