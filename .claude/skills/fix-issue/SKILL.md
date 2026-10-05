@@ -157,11 +157,9 @@ If a commit was already made by mistake:
 ## 7. On an explicit go-ahead: commit, push, PR
 
 Commit message: `type(scope): summary (#N)` — a body explaining _why_, wrapped
-at ~72 columns, ending with:
-
-```
-Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
-```
+at ~72 columns, ending with the `Co-Authored-By` trailer the session's
+attribution guidance gives. Don't write a model name in here: it goes stale with
+every new model, and the session always knows the current one.
 
 Then push and open the PR **into `dev`**, not `main`:
 
@@ -185,8 +183,11 @@ If `gh pr edit` fails on a Projects-classic deprecation (it does in the sibling
 `time_tracker` repo), amend the PR with:
 
 ```bash
-gh api -X PATCH repos/lightofdata/website/pulls/<n> -f body=@<file>
+gh api -X PATCH repos/lightofdata/website/pulls/<n> -F body=@<file>
 ```
+
+Capital `-F`: only it reads `@<file>`; lower-case `-f` sends the literal string
+`@<file>` and replaces the PR body with a local path.
 
 CI (`.github/workflows/validate.yml`) runs on PRs to `main` and `dev`: build,
 `format:check`, `lint`, `test:run`, then E2E on chromium and firefox. It does

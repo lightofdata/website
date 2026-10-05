@@ -69,6 +69,12 @@ mistaken, or the fix they suggest would break something they could not see from
 the diff, do not silently comply — make the case in your report and let the user
 decide. Note it and move on; do not argue in the PR thread unasked.
 
+When the reviewer is mistaken, check whether the PR itself misled them. A
+comment or a line of the PR description that states something false invites
+exactly the wrong suggestion, and the reviewer may have trusted it. Then the fix
+is to correct that text, not to follow the suggestion. Update the PR body along
+with the commit (see `close-pr-comments` for how).
+
 Follow the house conventions in the `fix-issue` skill for anything the change
 touches — in particular the consent-before-analytics rule, the single
 `@media (max-width: 600px)` breakpoint, and the committed visual snapshots
@@ -106,4 +112,4 @@ reinventing them.
 
 Do not resolve the threads yourself unless the user asks. Replying to or
 resolving a thread is a message to the reviewer in the user's name, and that is
-theirs to send.
+theirs to send — `close-pr-comments` is the skill for when they do.
