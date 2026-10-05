@@ -284,8 +284,15 @@ test.describe("Projects Section Integration", () => {
     await expect(
       projectsSection.getByRole("heading", { name: "Time Tracker" })
     ).toBeVisible();
-    await expect(projectsSection).toContainText("privacy-focused");
-    await expect(projectsSection).toContainText("beta testing");
+    // "privacy-focused" was dropped from the card: it set nothing apart and
+    // the product page does not back it up (#62)
+    await expect(projectsSection).toContainText(
+      "freelancers and consultants who bill multiple clients"
+    );
+    await expect(projectsSection).toContainText(
+      "Available on the App Store and Google Play"
+    );
+    await expect(projectsSection).not.toContainText("beta testing");
   });
 });
 

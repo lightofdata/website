@@ -23,13 +23,16 @@ describe("Projects Section", () => {
         <div class="services">
           <div class="service">
             <h3>Time Tracker</h3>
-            <p>A privacy-focused time tracking application currently in testing.</p>
             <p>
-              Track your time efficiently with a clean, intuitive interface designed
-              for productivity.
+              Time tracking for freelancers and consultants who bill multiple
+              clients.
             </p>
-            <p style="margin-top: 1rem; font-style: italic; color: #666;">
-              Coming soon - Currently in beta testing
+            <p>
+              Track hours offline and export timesheets to PDF or CSV. With Pro,
+              each client gets their own Google Calendar.
+            </p>
+            <p class="service-note">
+              Available on the App Store and Google Play
             </p>
             <p style="margin-top: 0.5rem;">
               <a href="/time-tracker-privacy.html" style="color: #1a6a7e; text-decoration: none; font-weight: 500;">
@@ -81,15 +84,15 @@ describe("Projects Section", () => {
       const projectsSection = document.getElementById("projects");
       const paragraphs = projectsSection.querySelectorAll("p");
 
-      const hasPrivacyDescription = Array.from(paragraphs).some((p) =>
-        p.textContent.includes("privacy-focused time tracking")
+      const hasDescription = Array.from(paragraphs).some((p) =>
+        p.textContent.includes("freelancers and consultants who bill multiple")
       );
-      const hasBetaMessage = Array.from(paragraphs).some((p) =>
-        p.textContent.includes("Coming soon")
+      const hasStoreMessage = Array.from(paragraphs).some((p) =>
+        p.textContent.includes("Available on the App Store and Google Play")
       );
 
-      expect(hasPrivacyDescription).toBe(true);
-      expect(hasBetaMessage).toBe(true);
+      expect(hasDescription).toBe(true);
+      expect(hasStoreMessage).toBe(true);
     });
 
     it("should have privacy policy link in project card", () => {
@@ -216,16 +219,13 @@ describe("Projects Section", () => {
   });
 
   describe("Content Requirements", () => {
-    it("should clearly indicate beta/testing status", () => {
+    // The app is in both stores, so the card must not still call it a beta
+    it("should not describe the app as unreleased", () => {
       const projectsSection = document.getElementById("projects");
       const content = projectsSection.textContent.toLowerCase();
 
-      const hasBetaIndicator =
-        content.includes("testing") ||
-        content.includes("beta") ||
-        content.includes("coming soon");
-
-      expect(hasBetaIndicator).toBe(true);
+      expect(content).not.toContain("beta");
+      expect(content).not.toContain("coming soon");
     });
 
     it("should emphasize privacy focus", () => {
