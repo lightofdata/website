@@ -140,6 +140,24 @@
     padding: 0.7rem;
     font-size: 0.92rem;
   }
+  /* Time Tracker product page. These sit above the page's base rules, so
+     they repeat a parent class to win on specificity. */
+  .section.tt-hero h1 {
+    font-size: 1.6rem;
+  }
+  .tt-hero .tt-subhead {
+    font-size: 1.1rem;
+  }
+  .tt-hero .tt-lead {
+    font-size: 1rem;
+  }
+  .services.tt-features,
+  .services.tt-plans {
+    flex-direction: column;
+  }
+  .section .tt-screenshots {
+    gap: 0.5rem;
+  }
   .footer {
     font-size: 0.7rem;
     padding: 0.5rem 0;
@@ -382,6 +400,155 @@ html[data-theme="dark"] .section a:hover {
 
 html[data-theme="dark"] .screenshot {
   border-color: #3a4048 !important;
+}
+
+/* Status line under a project card's description */
+.service-note {
+  margin-top: 1rem;
+  font-style: italic;
+  color: #666;
+}
+html[data-theme="dark"] .service-note {
+  color: #a9b2bb !important;
+}
+
+/* Time Tracker product page */
+.tt-page .section a:not(.tt-store-badge) {
+  color: #1a6a7e;
+  font-weight: 500;
+  text-decoration: none;
+}
+.tt-hero {
+  text-align: center;
+}
+.tt-hero h1 {
+  font-size: 2.4rem;
+  line-height: 1.2;
+  margin: 0.5rem 0 1rem;
+}
+.tt-eyebrow {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  color: #1a6a7e;
+}
+.tt-subhead {
+  margin: 0 0 1rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1a6a7e;
+}
+.tt-lead {
+  max-width: 680px;
+  margin: 0 auto 1.5rem;
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+.tt-note {
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+.tt-store-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+/* Official store badges. Google's PNG has transparent padding built in, so it
+   is drawn taller and pulled in to match the App Store badge's 40px. */
+.tt-store-badge {
+  display: inline-flex;
+  transition: transform var(--smooth-duration) var(--smooth-ease);
+}
+.tt-store-badge:hover,
+.tt-store-badge:focus-visible {
+  transform: translateY(-2px);
+}
+.tt-store-badge img {
+  display: block;
+  height: 40px;
+  width: auto;
+}
+.tt-store-badge img.tt-store-badge-play {
+  height: 60px;
+  margin: -10px -9px;
+}
+.tt-features,
+.tt-plans {
+  flex-direction: row;
+}
+.tt-pro-tag {
+  display: inline-block;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  background: #1a6a7e;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.tt-pro-tag + h3 {
+  margin-top: 0.5rem;
+}
+.tt-cta {
+  text-align: center;
+}
+.tt-plans .service {
+  text-align: left;
+}
+.tt-plans ul {
+  padding-left: 1.2rem;
+}
+.tt-plans li {
+  margin-bottom: 0.4rem;
+}
+.tt-screenshots {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* Media placeholders: dashed frames at the media's final shape, so the layout
+   holds when the real videos and screenshots replace them. */
+.tt-media-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 2px dashed #b8c2cc;
+  border-radius: 16px;
+  background: #f1f3f6;
+  color: #5b6670;
+  font-size: 0.95rem;
+  text-align: center;
+  padding: 1rem;
+}
+.tt-media-placeholder-video {
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 16 / 9;
+  margin: 2rem auto 0;
+}
+.tt-media-placeholder-phone {
+  flex: 0 1 200px;
+  /* Let the label wrap rather than push the row past a 320px screen */
+  min-width: 0;
+  aspect-ratio: 9 / 19.5;
+}
+
+html[data-theme="dark"] .tt-eyebrow,
+html[data-theme="dark"] .tt-subhead {
+  color: #5ca8e0 !important;
+}
+html[data-theme="dark"] .tt-media-placeholder {
+  background: #262c33 !important;
+  border-color: #4a525c !important;
+  color: #a9b2bb !important;
 }
 
 html {
