@@ -155,8 +155,15 @@
   .services.tt-plans {
     flex-direction: column;
   }
+  /* One screenshot per row, large enough to read the app's text */
   .section .tt-screenshots {
-    gap: 0.5rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .tt-screenshots .tt-shot {
+    flex: none;
+    width: 80%;
   }
   .footer {
     font-size: 0.7rem;
@@ -534,11 +541,30 @@ html[data-theme="dark"] .service-note {
   aspect-ratio: 16 / 9;
   margin: 2rem auto 0;
 }
-.tt-media-placeholder-phone {
-  flex: 0 1 200px;
-  /* Let the label wrap rather than push the row past a 320px screen */
+/* Phone screenshots, uncropped, at the file's own shape (from width/height) */
+.tt-shot {
+  flex: 0 1 270px;
+  /* Let the row shrink on a 320px screen rather than overflow */
   min-width: 0;
-  aspect-ratio: 9 / 19.5;
+}
+.tt-shot img {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: auto;
+  border: 1px solid #dde2e7;
+  border-radius: 16px;
+}
+/* Hidden lazy images are not fetched, so only one of each pair downloads */
+.tt-shot .tt-shot-dark,
+html[data-theme="dark"] .tt-shot .tt-shot-light {
+  display: none;
+}
+html[data-theme="dark"] .tt-shot .tt-shot-dark {
+  display: block;
+}
+html[data-theme="dark"] .tt-shot img {
+  border-color: #3a4048 !important;
 }
 
 html[data-theme="dark"] .tt-eyebrow,

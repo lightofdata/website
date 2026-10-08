@@ -35,9 +35,26 @@ test.describe("Time Tracker Product Page", () => {
       'meta[property="og:title"]',
       'meta[property="og:description"]',
       'meta[name="twitter:card"]',
+      'meta[property="og:image:alt"]',
     ]) {
       await expect(page.locator(selector)).toHaveAttribute("content", /\S/);
     }
+
+    // The share card is a large 1200×630 image, and the file is there
+    const card = "https://lightofdata.earth/images/time-tracker/og-card.png";
+    for (const selector of [
+      'meta[property="og:image"]',
+      'meta[name="twitter:image"]',
+    ]) {
+      await expect(page.locator(selector)).toHaveAttribute("content", card);
+    }
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
+      "content",
+      "summary_large_image"
+    );
+    const response = await page.request.get(new URL(card).pathname);
+    expect(response.ok()).toBe(true);
+    expect(response.headers()["content-type"]).toContain("image/png");
   });
 
   test("should link to both stores with the official badges", async ({
@@ -193,18 +210,64 @@ test.describe("Time Tracker Product Page", () => {
     );
   });
 
-  test("should hold places for the demo video and screenshots", async ({
+  test("should hold a place for the demo video", async ({ page }) => {
+    await page.goto("/time-tracker.html");
+
+    await expect(page.locator("[data-placeholder]")).toHaveCount(1);
+    const video = page.locator('[data-placeholder="video"]');
+    await expect(video).toHaveAttribute("role", "img");
+    await expect(video).toHaveAttribute("aria-label", /coming soon/i);
+  });
+
+  test("should show each screenshot in the page's theme, uncropped", async ({
     page,
   }) => {
     await page.goto("/time-tracker.html");
+    await handleCookieConsent(page);
 
-    await expect(page.locator('[data-placeholder="video"]')).toHaveCount(1);
-    await expect(page.locator('[data-placeholder="screenshot"]')).toHaveCount(
-      3
-    );
-    for (const el of await page.locator("[data-placeholder]").all()) {
-      await expect(el).toHaveAttribute("role", "img");
-      await expect(el).toHaveAttribute("aria-label", /coming soon/i);
+    const shots = ["entries", "google-cal", "report"];
+    const order = await page
+      .locator("[data-shot]")
+      .evaluateAll((els) => els.map((el) => el.dataset.shot));
+    expect(order).toEqual(shots);
+
+    const html = page.locator("html");
+    for (const theme of ["light", "dark"]) {
+      if ((await html.getAttribute("data-theme")) !== theme) {
+        await page.locator("#theme-toggle").click();
+      }
+      await expect(html).toHaveAttribute("data-theme", theme);
+      const other = theme === "light" ? "dark" : "light";
+
+      for (const shot of shots) {
+        const img = page.locator(`[data-shot="${shot}"] .tt-shot-${theme}`);
+        await expect(img).toHaveAttribute(
+          "src",
+          `./images/time-tracker/${shot}-${theme}.webp`
+        );
+        await expect(img).toHaveAttribute("alt", /.+/);
+        await expect(
+          page.locator(`[data-shot="${shot}"] .tt-shot-${other}`)
+        ).toBeHidden();
+
+        await img.scrollIntoViewIfNeeded();
+        await expect(img).toBeVisible();
+        // Loaded, not a broken image (lazy images load once shown)
+        await expect
+          .poll(() => img.evaluate((el) => el.complete && el.naturalWidth))
+          .toBeGreaterThan(0);
+
+        // Not cropped or stretched: rendered shape matches the file's shape
+        const { naturalWidth, naturalHeight } = await img.evaluate((el) => ({
+          naturalWidth: el.naturalWidth,
+          naturalHeight: el.naturalHeight,
+        }));
+        const box = await img.boundingBox();
+        expect(box.height / box.width).toBeCloseTo(
+          naturalHeight / naturalWidth,
+          1
+        );
+      }
     }
   });
 
@@ -287,12 +350,17 @@ test.describe("Time Tracker Product Page", () => {
     await page.locator("#menu-toggle").click();
     await expect(page.locator("#nav-links")).toBeVisible();
 
-    // Feature and plan cards stack instead of squeezing side by side
-    for (const selector of [".tt-features", ".tt-plans"]) {
+    // Feature and plan cards, and the screenshots, stack instead of
+    // squeezing side by side
+    for (const selector of [".tt-features", ".tt-plans", ".tt-screenshots"]) {
       await expect(page.locator(selector)).toHaveCSS(
         "flex-direction",
         "column"
       );
+    }
+    // Stacked screenshots are wide enough to read, not thumbnails
+    for (const shot of await page.locator(".tt-shot").all()) {
+      expect((await shot.boundingBox()).width).toBeGreaterThan(220);
     }
 
     // The page's own content fits the screen, down to the smallest common

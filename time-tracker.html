@@ -17,7 +17,6 @@
       href="./images/small/png/logo-small-light-t.png"
     />
     <link rel="canonical" href="https://lightofdata.earth/time-tracker.html" />
-    <!-- og:image waits for the store screenshots (lightofdata/time_tracker#415) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Light of Data" />
     <meta
@@ -32,7 +31,25 @@
       property="og:description"
       content="Time Tracker for freelancers and consultants who bill multiple clients: track hours online or off, export timesheets to PDF or CSV, and with Pro, give each client their own Google Calendar and a monthly summary."
     />
-    <meta name="twitter:card" content="summary" />
+    <meta
+      property="og:image"
+      content="https://lightofdata.earth/images/time-tracker/og-card.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Time Tracker: time tracking for freelancers who bill multiple clients, shown next to the app's time entries and a client report"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:image"
+      content="https://lightofdata.earth/images/time-tracker/og-card.png"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Time Tracker: time tracking for freelancers who bill multiple clients, shown next to the app's time entries and a client report"
+    />
     <meta
       name="twitter:title"
       content="Time Tracker: time tracking for freelancers with multiple clients"
@@ -177,32 +194,62 @@
         </div>
       </div>
 
-      <!-- Placeholders until the store screenshots (lightofdata/time_tracker
-           #415/#416) are copied into public/images/time-tracker/. -->
+      <!-- Each shot has a light and a dark image; CSS shows the one that
+           matches the page theme, and the hidden lazy image is not fetched. -->
       <div class="tt-screenshots">
-        <div
-          class="tt-media-placeholder tt-media-placeholder-phone"
-          data-placeholder="screenshot"
-          role="img"
-          aria-label="Screenshot coming soon: time entries with a running timer"
-        >
-          <span>Screenshot coming soon</span>
+        <div class="tt-shot" data-shot="entries">
+          <img
+            class="tt-shot-light"
+            src="./images/time-tracker/entries-light.webp"
+            alt="Time Tracker time entries with a running timer"
+            width="600"
+            height="1336"
+            loading="lazy"
+          />
+          <img
+            class="tt-shot-dark"
+            src="./images/time-tracker/entries-dark.webp"
+            alt="Time Tracker time entries with a running timer"
+            width="600"
+            height="1336"
+            loading="lazy"
+          />
         </div>
-        <div
-          class="tt-media-placeholder tt-media-placeholder-phone"
-          data-placeholder="screenshot"
-          role="img"
-          aria-label="Screenshot coming soon: a client's calendar in Google Calendar"
-        >
-          <span>Screenshot coming soon</span>
+        <div class="tt-shot" data-shot="google-cal">
+          <img
+            class="tt-shot-light"
+            src="./images/time-tracker/google-cal-light.webp"
+            alt="Each client's calendar in Google Calendar, filled by Time Tracker"
+            width="600"
+            height="1336"
+            loading="lazy"
+          />
+          <img
+            class="tt-shot-dark"
+            src="./images/time-tracker/google-cal-dark.webp"
+            alt="Each client's calendar in Google Calendar, filled by Time Tracker"
+            width="600"
+            height="1336"
+            loading="lazy"
+          />
         </div>
-        <div
-          class="tt-media-placeholder tt-media-placeholder-phone"
-          data-placeholder="screenshot"
-          role="img"
-          aria-label="Screenshot coming soon: a timesheet report with an AI summary"
-        >
-          <span>Screenshot coming soon</span>
+        <div class="tt-shot" data-shot="report">
+          <img
+            class="tt-shot-light"
+            src="./images/time-tracker/report-light.webp"
+            alt="Time Tracker timesheet report, summarised for the client"
+            width="600"
+            height="1336"
+            loading="lazy"
+          />
+          <img
+            class="tt-shot-dark"
+            src="./images/time-tracker/report-dark.webp"
+            alt="Time Tracker timesheet report, summarised for the client"
+            width="600"
+            height="1336"
+            loading="lazy"
+          />
         </div>
       </div>
     </section>
