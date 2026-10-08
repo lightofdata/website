@@ -223,7 +223,6 @@ test.describe("Time Tracker Product Page", () => {
     page,
   }) => {
     await page.goto("/time-tracker.html");
-    await handleCookieConsent(page);
 
     const shots = ["entries", "google-cal", "report"];
     const order = await page
