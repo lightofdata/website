@@ -14,7 +14,7 @@ test.describe("Time Tracker Product Page", () => {
       "Time tracking for freelancers who bill multiple clients"
     );
     await expect(page.locator(".tt-subhead")).toHaveText(
-      "Show every client where the hours went."
+      "Every minute, accounted for."
     );
   });
 
