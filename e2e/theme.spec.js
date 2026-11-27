@@ -200,9 +200,10 @@ test.describe("Theme Switching", () => {
     page,
   }) => {
     // With theme.js blocked, only the inline <head> script can set the theme,
-    // which proves a dark page does not flash light first.
+    // which proves a dark page does not flash light first. The built site
+    // bundles theme.js into assets/*.js, so block every script bundle.
     await page.addInitScript(() => localStorage.setItem("theme", "dark"));
-    await page.route(/\/src\/theme\.js|\/assets\/.*\.js$/, (route) =>
+    await page.route(/\/(?:src\/theme|assets\/[^/]+)\.js$/, (route) =>
       route.abort()
     );
     await page.goto("/");
