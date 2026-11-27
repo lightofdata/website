@@ -138,6 +138,83 @@ test.describe("Theme Switching", () => {
     await expect(html).toHaveAttribute("data-theme", "dark");
   });
 
+  test("should cycle System, Dark, Light and back to System", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await handleCookieConsent(page);
+
+    const html = page.locator("html");
+    const themeToggle = page.locator("#theme-toggle");
+    const savedTheme = () => page.evaluate(() => localStorage.getItem("theme"));
+
+    await expect(themeToggle).toHaveAttribute("data-mode", "system");
+    await expect(themeToggle).toHaveText("🌓");
+
+    await themeToggle.click();
+    await expect(html).toHaveAttribute("data-theme", "dark");
+    await expect(themeToggle).toHaveText("🌙");
+    expect(await savedTheme()).toBe("dark");
+
+    await themeToggle.click();
+    await expect(html).toHaveAttribute("data-theme", "light");
+    await expect(themeToggle).toHaveText("☀️");
+    expect(await savedTheme()).toBe("light");
+
+    // Back to System: the saved choice is removed and live changes apply
+    await themeToggle.click();
+    await expect(themeToggle).toHaveAttribute("data-mode", "system");
+    expect(await savedTheme()).toBeNull();
+    await page.emulateMedia({ colorScheme: "dark" });
+    await expect(html).toHaveAttribute("data-theme", "dark");
+  });
+
+  test("should show the opposite theme on the first click from a dark system", async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: "dark" });
+    await page.goto("/");
+    await handleCookieConsent(page);
+
+    const html = page.locator("html");
+    await expect(html).toHaveAttribute("data-theme", "dark");
+    await page.click("#theme-toggle");
+    await expect(html).toHaveAttribute("data-theme", "light");
+  });
+
+  test("should switch the favicon on every theme change", async ({ page }) => {
+    await page.goto("/");
+    await handleCookieConsent(page);
+
+    const favicon = page.locator("link[rel~='icon']");
+    await expect(favicon).toHaveAttribute("href", /logo-small-dark-w\.png/);
+
+    await page.click("#theme-toggle");
+    await expect(favicon).toHaveAttribute("href", /logo-small-light-b\.png/);
+
+    await page.click("#theme-toggle");
+    await expect(favicon).toHaveAttribute("href", /logo-small-dark-w\.png/);
+  });
+
+  test("should apply the saved theme before theme.js runs", async ({
+    page,
+  }) => {
+    // With theme.js blocked, only the inline <head> script can set the theme,
+    // which proves a dark page does not flash light first.
+    await page.addInitScript(() => localStorage.setItem("theme", "dark"));
+    await page.route(/\/src\/theme\.js|\/assets\/.*\.js$/, (route) =>
+      route.abort()
+    );
+    await page.goto("/");
+
+    const html = page.locator("html");
+    await expect(html).toHaveAttribute("data-theme", "dark");
+    await expect(page.locator("link[rel~='icon']")).toHaveAttribute(
+      "href",
+      /logo-small-light-b\.png/
+    );
+  });
+
   test("should maintain theme across navigation", async ({ page }) => {
     await page.goto("/");
 
@@ -323,9 +400,10 @@ test.describe("Theme Functionality Tests", () => {
       await page.waitForTimeout(100);
     }
 
-    // Final state should be dark (odd number of clicks)
+    // Three clicks go Dark, Light, then back to System (light here)
     const html = page.locator("html");
-    await expect(html).toHaveAttribute("data-theme", "dark");
+    await expect(html).toHaveAttribute("data-theme", "light");
+    await expect(themeToggle).toHaveAttribute("data-mode", "system");
 
     // Navigation should still work (with mobile menu handling)
     await clickMobileNavLink(page, "#services-title");
