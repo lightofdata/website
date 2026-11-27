@@ -90,8 +90,34 @@
     <link
       rel="icon"
       type="image/png"
-      href="./images/small/png/logo-small-light-t.png"
+      href="./images/small/png/logo-small-dark-w.png"
     />
+    <script>
+      // Apply the saved or system theme before the first paint, so a dark
+      // page does not flash light. Keep in step with src/theme.js.
+      (function () {
+        var mode = null;
+        try {
+          mode = localStorage.getItem("theme");
+        } catch (e) {
+          // Storage is blocked; follow the system.
+        }
+        var theme =
+          mode === "light" || mode === "dark"
+            ? mode
+            : window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+        document.documentElement.setAttribute("data-theme", theme);
+        var icon = document.querySelector("link[rel~='icon']");
+        if (icon) {
+          icon.href =
+            theme === "dark"
+              ? "./images/small/png/logo-small-light-b.png"
+              : "./images/small/png/logo-small-dark-w.png";
+        }
+      })();
+    </script>
     <link rel="stylesheet" href="./src/style.css" />
 
     <script>
@@ -349,8 +375,8 @@
         <button
           id="theme-toggle"
           onclick="toggleTheme()"
-          aria-label="Toggle dark mode"
-          title="Toggle dark mode"
+          aria-label="Switch theme"
+          title="Switch theme"
           style="
             margin-left: 1rem;
             padding: 0.5rem 1rem;

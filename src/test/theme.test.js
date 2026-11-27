@@ -1,221 +1,245 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 /**
- * Test suite for dark mode and theme functionality
- * Tests theme switching, icon updates, and system preference handling
+ * Tests for src/theme.js: the three-way theme switch (System, Light, Dark),
+ * persistence, following the system, and the assets that follow the theme
+ * (favicon, GitHub and LinkedIn icons, the toggle itself).
+ *
+ * The module runs on import, so each test sets up storage, the system
+ * preference and the DOM first, then imports a fresh copy.
  */
 
-describe("Dark Mode and Theme Functionality", () => {
+let store;
+let systemIsDark;
+let mediaListeners;
+
+const html = () => document.documentElement;
+const theme = () => html().getAttribute("data-theme");
+const toggle = () => document.getElementById("theme-toggle");
+const favicon = () => document.querySelector("link[rel~='icon']");
+
+const setSystemDark = (dark) => {
+  systemIsDark = dark;
+  mediaListeners.forEach((listener) => listener({ matches: dark }));
+};
+
+const loadTheme = async () => {
+  vi.resetModules();
+  await import("../theme.js");
+};
+
+describe("Theme switch", () => {
   beforeEach(() => {
-    // Setup DOM elements needed for theme functionality
+    store = {};
+    systemIsDark = false;
+    mediaListeners = [];
+
+    window.localStorage.getItem.mockImplementation((key) =>
+      key in store ? store[key] : null
+    );
+    window.localStorage.setItem.mockImplementation((key, value) => {
+      store[key] = String(value);
+    });
+    window.localStorage.removeItem.mockImplementation((key) => {
+      delete store[key];
+    });
+
+    window.matchMedia = vi.fn().mockImplementation((query) => ({
+      get matches() {
+        return query === "(prefers-color-scheme: dark)" && systemIsDark;
+      },
+      media: query,
+      addEventListener: (type, listener) => mediaListeners.push(listener),
+      removeEventListener: vi.fn(),
+    }));
+
+    html().removeAttribute("data-theme");
+    document.head.innerHTML = `
+      <link rel="icon" type="image/png" href="./images/small/png/logo-small-dark-w.png" />
+    `;
     document.body.innerHTML = `
       <button id="theme-toggle" onclick="toggleTheme()">🌓</button>
       <img id="github-icon" src="./images/github-mark.svg" alt="GitHub" />
-      <img id="linkedin-icon" src="./images/InBug-Black.png" alt="LinkedIn" />
-      <link rel="icon" type="image/png" href="./images/small/png/logo-small-light-t.png" />
+      <img id="linkedin-icon" src="./images/LI-In-Bug.png" alt="LinkedIn" />
     `;
-
-    // Define theme functions globally for testing
-    global.updateGithubIcon = (theme) => {
-      const icon = document.getElementById("github-icon");
-      if (!icon) return;
-      const baseUrl = "./";
-      icon.src =
-        theme === "dark"
-          ? `${baseUrl}images/github-mark-white.svg`
-          : `${baseUrl}images/github-mark.svg`;
-    };
-
-    global.updateLinkedInIcon = (theme) => {
-      const icon = document.getElementById("linkedin-icon");
-      if (!icon) return;
-      const baseUrl = "./";
-      icon.src =
-        theme === "dark"
-          ? `${baseUrl}images/InBug-White.png`
-          : `${baseUrl}images/InBug-Black.png`;
-    };
-
-    global.updateHeadIcon = (theme) => {
-      let link = document.querySelector("link[rel~='icon']");
-      if (!link) {
-        link = document.createElement("link");
-        link.rel = "icon";
-        document.getElementsByTagName("head")[0].appendChild(link);
-      }
-      const baseUrl = "./";
-      link.href =
-        theme === "dark"
-          ? `${baseUrl}images/small/png/logo-small-light-t.png?v=dark`
-          : `${baseUrl}images/small/png/logo-small-dark-t.png?v=light`;
-    };
-
-    global.setTheme = (theme, manual = false) => {
-      document.documentElement.setAttribute("data-theme", theme);
-      global.updateGithubIcon(theme);
-      global.updateLinkedInIcon(theme);
-      if (!manual) global.updateHeadIcon(theme);
-    };
-
-    global.toggleTheme = () => {
-      const current = document.documentElement.getAttribute("data-theme");
-      global.setTheme(current === "dark" ? "light" : "dark", true);
-    };
   });
 
-  describe("Icon Updates", () => {
-    it("should update GitHub icon for dark theme", () => {
-      global.updateGithubIcon("dark");
-      const icon = document.getElementById("github-icon");
-      expect(icon.src).toContain("github-mark-white.svg");
+  describe("Initial theme", () => {
+    it("follows a light system when nothing is saved", async () => {
+      await loadTheme();
+      expect(theme()).toBe("light");
+      expect(toggle().dataset.mode).toBe("system");
+      expect(toggle().textContent).toBe("🌓");
     });
 
-    it("should update GitHub icon for light theme", () => {
-      global.updateGithubIcon("light");
-      const icon = document.getElementById("github-icon");
-      expect(icon.src).toContain("github-mark.svg");
+    it("follows a dark system when nothing is saved", async () => {
+      systemIsDark = true;
+      await loadTheme();
+      expect(theme()).toBe("dark");
+      expect(toggle().dataset.mode).toBe("system");
     });
 
-    it("should update LinkedIn icon for dark theme", () => {
-      global.updateLinkedInIcon("dark");
-      const icon = document.getElementById("linkedin-icon");
-      expect(icon.src).toContain("InBug-White.png");
+    it("applies a saved theme over the system", async () => {
+      systemIsDark = true;
+      store.theme = "light";
+      await loadTheme();
+      expect(theme()).toBe("light");
+      expect(toggle().dataset.mode).toBe("light");
+      expect(toggle().textContent).toBe("☀️");
     });
 
-    it("should update LinkedIn icon for light theme", () => {
-      global.updateLinkedInIcon("light");
-      const icon = document.getElementById("linkedin-icon");
-      expect(icon.src).toContain("InBug-Black.png");
+    it("ignores an unknown saved value", async () => {
+      store.theme = "sepia";
+      await loadTheme();
+      expect(theme()).toBe("light");
+      expect(toggle().dataset.mode).toBe("system");
     });
 
-    it("should handle missing icons gracefully", () => {
-      document.getElementById("github-icon").remove();
-      expect(() => global.updateGithubIcon("dark")).not.toThrow();
-    });
-
-    it("should update head icon for different themes", () => {
-      global.updateHeadIcon("dark");
-      const link = document.querySelector("link[rel~='icon']");
-      expect(link.href).toContain("logo-small-light-t.png?v=dark");
-
-      global.updateHeadIcon("light");
-      expect(link.href).toContain("logo-small-dark-t.png?v=light");
-    });
-
-    it("should create head icon if none exists", () => {
-      document.querySelector("link[rel~='icon']").remove();
-      global.updateHeadIcon("dark");
-      const link = document.querySelector("link[rel~='icon']");
-      expect(link).toBeTruthy();
-      expect(link.href).toContain("logo-small-light-t.png?v=dark");
+    it("follows the system when storage is blocked", async () => {
+      systemIsDark = true;
+      window.localStorage.getItem.mockImplementation(() => {
+        throw new Error("SecurityError");
+      });
+      await loadTheme();
+      expect(theme()).toBe("dark");
     });
   });
 
-  describe("Theme Setting", () => {
-    it("should set data-theme attribute on documentElement", () => {
-      global.setTheme("dark");
-      expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
+  describe("Three-way toggle", () => {
+    it("cycles System → Dark → Light → System on a light system", async () => {
+      await loadTheme();
 
-      global.setTheme("light");
-      expect(document.documentElement.getAttribute("data-theme")).toBe("light");
+      window.toggleTheme();
+      expect(theme()).toBe("dark");
+      expect(toggle().dataset.mode).toBe("dark");
+      expect(store.theme).toBe("dark");
+
+      window.toggleTheme();
+      expect(theme()).toBe("light");
+      expect(toggle().dataset.mode).toBe("light");
+      expect(store.theme).toBe("light");
+
+      window.toggleTheme();
+      expect(theme()).toBe("light");
+      expect(toggle().dataset.mode).toBe("system");
+      expect("theme" in store).toBe(false);
     });
 
-    it("should update all icons when setting theme automatically", () => {
-      global.setTheme("dark", false);
+    it("cycles System → Light → Dark → System on a dark system", async () => {
+      systemIsDark = true;
+      await loadTheme();
 
-      const githubIcon = document.getElementById("github-icon");
-      const linkedinIcon = document.getElementById("linkedin-icon");
-      const headIcon = document.querySelector("link[rel~='icon']");
-
-      expect(githubIcon.src).toContain("github-mark-white.svg");
-      expect(linkedinIcon.src).toContain("InBug-White.png");
-      expect(headIcon.href).toContain("logo-small-light-t.png?v=dark");
+      window.toggleTheme();
+      expect(theme()).toBe("light");
+      window.toggleTheme();
+      expect(theme()).toBe("dark");
+      expect(store.theme).toBe("dark");
+      window.toggleTheme();
+      expect(toggle().dataset.mode).toBe("system");
+      expect("theme" in store).toBe(false);
     });
 
-    it("should skip head icon update when setting theme manually", () => {
-      const originalHref = document.querySelector("link[rel~='icon']").href;
-      global.setTheme("dark", true);
-
-      const headIcon = document.querySelector("link[rel~='icon']");
-      expect(headIcon.href).toBe(originalHref); // Should not change
-    });
-  });
-
-  describe("Theme Toggle", () => {
-    it("should toggle from light to dark", () => {
-      document.documentElement.setAttribute("data-theme", "light");
-      global.toggleTheme();
-      expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
-    });
-
-    it("should toggle from dark to light", () => {
-      document.documentElement.setAttribute("data-theme", "dark");
-      global.toggleTheme();
-      expect(document.documentElement.getAttribute("data-theme")).toBe("light");
-    });
-
-    it("should handle null theme attribute", () => {
-      document.documentElement.removeAttribute("data-theme");
-      expect(() => global.toggleTheme()).not.toThrow();
-      expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
-    });
-
-    it("should call setTheme with manual=true", () => {
-      document.documentElement.setAttribute("data-theme", "light");
-      const setThemeSpy = vi.spyOn(global, "setTheme");
-
-      global.toggleTheme();
-      expect(setThemeSpy).toHaveBeenCalledWith("dark", true);
-    });
-  });
-
-  describe("System Theme Detection", () => {
-    it("should detect dark system preference", () => {
-      const mockMatchMedia = vi.fn().mockImplementation((query) => ({
-        matches: query === "(prefers-color-scheme: dark)",
-        media: query,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-      }));
-
-      window.matchMedia = mockMatchMedia;
-
-      const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
-      expect(systemDark.matches).toBe(true);
-    });
-
-    it("should detect light system preference", () => {
-      const mockMatchMedia = vi.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-      }));
-
-      window.matchMedia = mockMatchMedia;
-
-      const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
-      expect(systemDark.matches).toBe(false);
-    });
-
-    it("should setup system theme change listener", () => {
-      const mockMatchMedia = vi.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-      }));
-
-      window.matchMedia = mockMatchMedia;
-
-      const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
-      const mockCallback = vi.fn();
-      systemDark.addEventListener("change", mockCallback);
-
-      expect(systemDark.addEventListener).toHaveBeenCalledWith(
-        "change",
-        mockCallback
+    it("labels the toggle with the current mode and the next one", async () => {
+      await loadTheme();
+      expect(toggle().getAttribute("aria-label")).toBe(
+        "Theme: System. Switch to Dark."
       );
+      window.toggleTheme();
+      expect(toggle().getAttribute("aria-label")).toBe(
+        "Theme: Dark. Switch to Light."
+      );
+      expect(toggle().title).toBe("Theme: Dark. Switch to Light.");
+    });
+
+    it("keeps working when storage is blocked", async () => {
+      window.localStorage.setItem.mockImplementation(() => {
+        throw new Error("QuotaExceededError");
+      });
+      await loadTheme();
+      expect(() => window.toggleTheme()).not.toThrow();
+      expect(theme()).toBe("dark");
+    });
+  });
+
+  describe("System changes", () => {
+    it("follows live system changes in System mode", async () => {
+      await loadTheme();
+      setSystemDark(true);
+      expect(theme()).toBe("dark");
+      setSystemDark(false);
+      expect(theme()).toBe("light");
+    });
+
+    it("ignores system changes once a theme is chosen", async () => {
+      await loadTheme();
+      window.toggleTheme(); // Dark
+      setSystemDark(true);
+      expect(theme()).toBe("dark");
+      setSystemDark(false);
+      expect(theme()).toBe("dark");
+    });
+
+    it("follows the system again after switching back to System", async () => {
+      await loadTheme();
+      window.toggleTheme(); // Dark
+      window.toggleTheme(); // Light
+      window.toggleTheme(); // System
+      setSystemDark(true);
+      expect(theme()).toBe("dark");
+    });
+
+    it("picks up a change made in another tab", async () => {
+      await loadTheme();
+      store.theme = "dark";
+      window.dispatchEvent(
+        new window.StorageEvent("storage", { key: "theme" })
+      );
+      expect(theme()).toBe("dark");
+      expect(toggle().dataset.mode).toBe("dark");
+    });
+  });
+
+  describe("Assets that follow the theme", () => {
+    it("uses the light favicon on a dark page and the dark one on a light page", async () => {
+      await loadTheme();
+      expect(favicon().href).toContain("logo-small-dark-w.png");
+
+      window.toggleTheme(); // Dark, a manual switch
+      expect(favicon().href).toContain("logo-small-light-b.png");
+
+      window.toggleTheme(); // Light
+      expect(favicon().href).toContain("logo-small-dark-w.png");
+    });
+
+    it("creates the favicon link if the page has none", async () => {
+      document.head.innerHTML = "";
+      systemIsDark = true;
+      await loadTheme();
+      expect(favicon()).toBeTruthy();
+      expect(favicon().href).toContain("logo-small-light-b.png");
+    });
+
+    it("swaps the GitHub and LinkedIn icons on every change", async () => {
+      await loadTheme();
+      const github = document.getElementById("github-icon");
+      const linkedin = document.getElementById("linkedin-icon");
+      expect(github.src).toContain("github-mark.svg");
+      expect(linkedin.src).toContain("InBug-Black.png");
+
+      window.toggleTheme(); // Dark
+      expect(github.src).toContain("github-mark-white.svg");
+      expect(linkedin.src).toContain("InBug-White.png");
+
+      window.toggleTheme(); // Light
+      expect(github.src).toContain("github-mark.svg");
+      expect(linkedin.src).toContain("InBug-Black.png");
+    });
+
+    it("works on pages without the social icons or the toggle", async () => {
+      document.body.innerHTML = "";
+      await loadTheme();
+      expect(() => window.toggleTheme()).not.toThrow();
+      expect(theme()).toBe("dark");
     });
   });
 });
