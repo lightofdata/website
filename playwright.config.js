@@ -1,5 +1,18 @@
 import { defineConfig, devices } from "@playwright/test";
 
+// The E2E tests run on their own server, so a dev server already running on
+// port 3000 (in whatever state, maybe from another session) cannot answer for
+// them. They build the site into .e2e-dist/ and serve it with `vite preview`,
+// which Vite's lock allows next to `vite dev` in the same folder; dist/ is
+// left alone. Set E2E_PORT if 4174 is taken.
+//
+// The build uses development mode, in CI too, so the page keeps the
+// GA-DEVELOPMENT-MODE id: a production build would load gtag.js and, once a
+// test accepts cookies, send hits to the live Google Analytics property.
+const port = Number(process.env.E2E_PORT) || 4174;
+const baseURL = `http://localhost:${port}`;
+const outDir = ".e2e-dist";
+
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
@@ -20,7 +33,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: process.env.CI ? "http://localhost:4173" : "http://localhost:3000",
+    baseURL,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
     /* Take screenshot only on failure */
@@ -86,16 +99,13 @@ export default defineConfig({
       : []),
   ],
 
-  /* Run your local dev server before starting the tests */
+  /* Build the site and serve it on a port of its own */
   webServer: {
-    command: "npm run dev",
-    url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
+    command:
+      `npx vite build --mode development --outDir ${outDir} --emptyOutDir --logLevel warn` +
+      ` && npx vite preview --outDir ${outDir} --port ${port} --strictPort --no-open`,
+    url: baseURL,
+    reuseExistingServer: false,
     timeout: 120 * 1000,
-    // Use different port in CI to avoid conflicts
-    ...(process.env.CI && {
-      command: "npm run dev -- --port 4173",
-      url: "http://localhost:4173",
-    }),
   },
 });

@@ -52,6 +52,17 @@ E2E tests are run before production deployment:
 - Browser sandbox args for CI compatibility
 ```
 
+### Test Server
+
+The E2E tests do not reuse a running dev server. Playwright builds the site
+into `.e2e-dist/` and serves it with `vite preview` on port 4174 (set
+`E2E_PORT` to change it), locally and in CI, so whatever is on port 3000 does
+not affect them and `dist/` is left alone.
+
+The build uses `--mode development`, so the page keeps the
+`GA-DEVELOPMENT-MODE` id and never loads the real Google Analytics script,
+even when a test accepts cookies.
+
 ### NPM Scripts
 
 ```json
