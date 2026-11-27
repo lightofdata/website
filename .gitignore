@@ -69,3 +69,6 @@ jspm_packages/
 # Playwright test results
 test-results/
 playwright-report/
+
+# E2E test build (playwright.config.js)
+.e2e-dist/
